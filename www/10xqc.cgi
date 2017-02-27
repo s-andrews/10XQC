@@ -2,7 +2,9 @@
 use warnings;
 use strict;
 use CGI;
+use CGI::Carp qw(fatalsToBrowser);
 use FindBin qw($Bin);
+use HTTP::Template;
 
 # Read config
 my $config;
@@ -12,11 +14,7 @@ my $dbh;
 
 # Direct the action
 
-## Testing.
-open (my $fh,$ARGV[0]) or die $!;
-read_file($fh);
-
-
+die "No action defined";
 
 ## Subroutines below here...
 
