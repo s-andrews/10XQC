@@ -109,10 +109,8 @@ function second_form(data){
   }
 
   // Parse plot data
-  // console.log(data);
   for (var p in data['charts']){
     if(typeof data['charts'][p]['layout'] != 'undefined' && data['charts'][p]['layout']['title'] == 'Barcode Rank'){
-      console.log(data['charts'][p]);
       var p_xdata = [];
       var p_ydata = [];
       for (var i = 0; i < data['charts'][p]['data'].length; i++) {
