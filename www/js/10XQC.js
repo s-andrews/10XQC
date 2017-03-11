@@ -29,6 +29,30 @@ $(function() {
   });
 
 
+  // Form Validation
+  $.validator.setDefaults({
+      highlight: function(element) {
+          $(element).closest('.form-group').addClass('has-danger');
+      },
+      unhighlight: function(element) {
+          $(element).closest('.form-group').removeClass('has-danger');
+      },
+      errorElement: 'small',
+      errorClass: 'form-control-feedback d-block',
+      errorPlacement: function(error, element) {
+          if(element.parent('.input-group').length) {
+              error.insertAfter(element.parent());
+          } else if(element.prop('type') === 'checkbox') {
+              error.appendTo(element.parent().parent().parent());
+          } else if(element.prop('type') === 'radio') {
+              error.appendTo(element.parent().parent().parent());
+          } else {
+              error.insertAfter(element);
+          }
+      },
+  });
+  $("#report_metadata_form").validate();
+
 });
 
 function second_form(data, file_hash){
@@ -140,7 +164,7 @@ function second_form(data, file_hash){
       <div class="form-group row"> \
         <label for="'+report_field_ids[i]+'" class="col-sm-4 col-form-label">'+report_field_titles[i]+'</label> \
         <div class="col-sm-8 '+input_gp+'"> \
-          <input id="'+report_field_ids[i]+'" name="sample_id" class="form-control" type="text" readonly value="'+value+'"> \
+          <input id="'+report_field_ids[i]+'" name="'+report_field_ids[i]+'" class="form-control" type="text" readonly value="'+value+'"> \
           ' + input_addon + '\
         </div> \
       </div> \

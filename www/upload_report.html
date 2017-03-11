@@ -58,7 +58,7 @@
         <div class="form-group row">
           <label for="meta_species" class="col-sm-4 col-form-label">Species</label>
           <div class="col-sm-8">
-            <select id="meta_species" class="form-control">
+            <select id="meta_species" name="meta_species" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>Homo sapiens [GRCh37]</option>
               <option>Homo sapiens [hg19]</option>
@@ -100,7 +100,7 @@
         <div class="form-group row">
           <label for="meta_sequencing_technology" class="col-sm-4 col-form-label">Sequencing Technology</label>
           <div class="col-sm-8">
-            <select id="meta_sequencing_technology" class="form-control">
+            <select id="meta_sequencing_technology" name="meta_sequencing_technology" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>Illumina - NovaSeq</option>
               <option>Illumina - HiSeq X Ten</option>
@@ -128,13 +128,13 @@
         <div class="form-group row">
           <label for="meta_num_cells_loaded" class="col-sm-4 col-form-label">Estimated number of cells loaded</label>
           <div class="col-sm-8">
-            <input id="meta_num_cells_loaded" class="form-control" type="number" placeholder="# cells loaded">
+            <input id="meta_num_cells_loaded" name="meta_num_cells_loaded" class="form-control" type="number" placeholder="# cells loaded" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="meta_cell_counting_method" class="col-sm-4 col-form-label">Cell counting technology</label>
           <div class="col-sm-8">
-            <select id="meta_cell_counting_method" class="form-control">
+            <select id="meta_cell_counting_method" name="meta_cell_counting_method" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>Life-Tech Countess II</option>
               <option>hemocytometer</option>
@@ -150,7 +150,7 @@
         <div class="form-group row">
           <label for="meta_cell_state" class="col-sm-4 col-form-label">Cell State</label>
           <div class="col-sm-8">
-            <select id="meta_cell_state" class="form-control">
+            <select id="meta_cell_state" name="meta_cell_state" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>Fresh</option>
               <option>Frozen</option>
@@ -161,7 +161,7 @@
         <div class="form-group row">
           <label for="meta_sample_type" class="col-sm-4 col-form-label">Sample type</label>
           <div class="col-sm-8">
-            <select id="meta_sample_type" class="form-control">
+            <select id="meta_sample_type" name="meta_sample_type" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>Cell line - suspension</option>
               <option>Cell line - adherent</option>
@@ -177,13 +177,13 @@
         <div class="form-group row">
           <label for="meta_cell_line_tissue" class="col-sm-4 col-form-label">Cell Line / Tissue Type</label>
           <div class="col-sm-8">
-            <input id="meta_cell_line_tissue" class="form-control" type="text" placeholder="Cell Line / Tissue Type">
+            <input id="meta_cell_line_tissue" name="meta_cell_line_tissue" class="form-control" type="text" placeholder="Cell Line / Tissue Type" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="meta_tissue_dissociation" class="col-sm-4 col-form-label">Tissue Dissociation</label>
           <div class="col-sm-8">
-            <select id="meta_tissue_dissociation" class="form-control">
+            <select id="meta_tissue_dissociation" name="meta_tissue_dissociation" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>Yes - enzymatic</option>
               <option>Yes - physical</option>
@@ -196,19 +196,19 @@
         <div class="form-group row">
           <label for="meta_min_cell_size" class="col-sm-4 col-form-label">Min cell size (&mu;m)</label>
           <div class="col-sm-8">
-            <input id="meta_min_cell_size" class="form-control" type="number" placeholder="Min cell size">
+            <input id="meta_min_cell_size" name="meta_min_cell_size" class="form-control" type="number" placeholder="Min cell size" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="meta_max_cell_size" class="col-sm-4 col-form-label">Max cell size (&mu;m)</label>
           <div class="col-sm-8">
-            <input id="meta_max_cell_size" class="form-control" type="number" placeholder="Max cell size">
+            <input id="meta_max_cell_size" name="meta_max_cell_size" class="form-control" type="number" placeholder="Max cell size" required>
           </div>
         </div>
         <div class="form-group row">
           <label for="meta_scrnaseq_method" class="col-sm-4 col-form-label">scRNA-Seq method</label>
           <div class="col-sm-8">
-            <select id="meta_scrnaseq_method" class="form-control">
+            <select id="meta_scrnaseq_method" name="meta_scrnaseq_method" class="form-control" required>
               <option value="">[ please select ]</option>
               <option>10X Genomics 3'mRNA v1</option>
               <option>10X Genomics 3'mRNA v2</option>
@@ -247,6 +247,7 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="js/jquery.validate.min.js"></script>
 <script src="js/sha1.min.js"></script>
 <script src="js/lz-string.min.js"></script>
 <script src="js/10XQC.js"></script>
