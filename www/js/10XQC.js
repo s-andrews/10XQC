@@ -14,6 +14,7 @@ $(function() {
       // First, entire file is in base64
       var matches = e.target.result.match(/^data:text\/html;base64,(.*)$/);
       var base64_data = matches[1];
+      var file_hash = sha1(base64_data);
       var raw_report = atob(base64_data, 'base64');
 
       // Pull out the compressed data
@@ -22,7 +23,7 @@ $(function() {
 
       // Decompress the data and pass on to form
       var data = JSON.parse(LZString.decompressFromEncodedURIComponent(compressed_data));
-      second_form(data);
+      second_form(data, file_hash);
     };
     reader.readAsDataURL(file);
   });
@@ -30,8 +31,9 @@ $(function() {
 
 });
 
-function second_form(data){
+function second_form(data, file_hash){
   var report_field_ids = [
+    'report_file_hash',
     'report_sample_id',
     'report_sample_desc',
     'report_chemistry_description',
@@ -60,6 +62,7 @@ function second_form(data){
     'report_barcode_rank_plot_data'
   ];
   var report_field_titles = [
+    'File sha1 Hash (unique identifier)',
     'Sample ID',
     'Sample Description',
     'Chemistry Description',
@@ -88,6 +91,7 @@ function second_form(data){
     'UMI Counts / Barcodes Plot Data'
   ];
   var parsed_data = {};
+  parsed_data['report_file_hash'] = file_hash;
   parsed_data['report_sample_id'] = data['sample_id'];
   parsed_data['report_sample_description'] = data['sample_desc'];
   parsed_data['report_version'] = data['version'];
@@ -123,11 +127,21 @@ function second_form(data){
 
   // Create form fields
   for (var i = 0; i < report_field_ids.length; i++) {
+    var value = parsed_data[report_field_ids[i]];
+    var input_gp = '';
+    var input_addon = '';
+    if(value == undefined){ value = ''; }
+    if(value.substr(-1) == '%'){
+      value = value.slice(0, -1);
+      input_gp = 'input-group';
+      input_addon = '<div class="input-group-addon">%</div>';
+    }
     $('#report_fields_div').append(' \
       <div class="form-group row"> \
         <label for="'+report_field_ids[i]+'" class="col-sm-4 col-form-label">'+report_field_titles[i]+'</label> \
-        <div class="col-sm-8"> \
-          <input id="'+report_field_ids[i]+'" name="sample_id" class="form-control" type="text" readonly value="'+parsed_data[report_field_ids[i]]+'"> \
+        <div class="col-sm-8 '+input_gp+'"> \
+          <input id="'+report_field_ids[i]+'" name="sample_id" class="form-control" type="text" readonly value="'+value+'"> \
+          ' + input_addon + '\
         </div> \
       </div> \
     ');
