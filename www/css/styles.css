@@ -1,4 +1,75 @@
+body {
+  padding-bottom: 2rem;
+}
 nav.navbar {
   background-color:#1e2e56;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+.jumbotron {
+  padding: 2.5rem 2rem;
+}
+footer {
+  background-color: #ECEEEF;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 3rem 0 1rem;
+  padding: 0.75rem 0;
+  font-size: 70%;
+  color: #999;
+}
+footer a {
+  color: #999;
+}
+footer a:hover {
+  color: #999;
+}
+
+/* Making DataTables Look Nice */
+#sample_browse_table_wrapper {
+  font-size: 80%;
+}
+.dt-buttons {
+  margin-left: 1rem;
+  margin-top: -2px;
+}
+div.dataTables_length select,
+div.dataTables_filter input {
+  padding: .3rem .75rem;
+  line-height: 1;
+  color: #464a4c;
+  background-color: #fff;
+  background-image: none;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: .25rem;
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+}
+div.dataTables_length select {
+  height: 1.5rem;
+}
+div.dataTables_length select:focus,
+div.dataTables_filter input:focus {
+  color: #464a4c;
+  background-color: #fff;
+  border-color: #5cb3fd;
+  outline: 0;
+}
+table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
+  border-bottom: 1px solid #ccc;
+}
+
+#table_columns_modal_table label {
+  margin-bottom:0;
+}
+
+#report_metadata_form .form-group.row {
+  margin: 0.5rem 0;
+}
+#report_metadata_form .form-group.row:nth-child(odd){
+  background-color: #ededed;
 }

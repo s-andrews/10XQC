@@ -1,4 +1,4 @@
-// 10XQC JavaScript
+// 10XQC JavaScript - Submitting Reports
 $(function() {
 
   // Catch report uploads and process in the browser
