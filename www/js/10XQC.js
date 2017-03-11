@@ -33,8 +33,9 @@ $(function() {
 function second_form(data){
   var report_field_ids = [
     'report_sample_id',
-    'report_sample_id',
+    'report_sample_desc',
     'report_chemistry_description',
+    'report_transcriptome',
     'report_version',
     'report_estimated_number_of_cells',
     'report_mean_reads_per_cell',
@@ -56,11 +57,13 @@ function second_form(data){
     'report_median_genes_per_cell',
     'report_total_genes_detected',
     'report_median_umi_counts_per_cell',
+    'report_barcode_rank_plot_data'
   ];
   var report_field_titles = [
     'Sample ID',
     'Sample Description',
     'Chemistry Description',
+    'Transcriptome',
     'Cell Ranger Version',
     'Estimated Number of Cells',
     'Mean Reads per Cell',
@@ -82,12 +85,14 @@ function second_form(data){
     'Median Genes per Cell',
     'Total Genes Detected',
     'Median UMI Counts per Cell',
+    'UMI Counts / Barcodes Plot Data'
   ];
   var parsed_data = {};
   parsed_data['report_sample_id'] = data['sample_id'];
   parsed_data['report_sample_description'] = data['sample_desc'];
   parsed_data['report_version'] = data['version'];
   parsed_data['report_chemistry_description'] = data['info']['chemistry_description'];
+  parsed_data['report_transcriptome'] = data['genomes'].join(', ');
   for (var table in data['tables']) {
     for (var row in data['tables'][table]['rows']){
       var dtitle = data['tables'][table]['rows'][row][0]['v'];
@@ -100,6 +105,21 @@ function second_form(data){
       if (report_field_idx > -1){
         parsed_data[ report_field_ids[report_field_idx] ] = dval;
       }
+    }
+  }
+
+  // Parse plot data
+  // console.log(data);
+  for (var p in data['charts']){
+    if(typeof data['charts'][p]['layout'] != 'undefined' && data['charts'][p]['layout']['title'] == 'Barcode Rank'){
+      console.log(data['charts'][p]);
+      var p_xdata = [];
+      var p_ydata = [];
+      for (var i = 0; i < data['charts'][p]['data'].length; i++) {
+        p_xdata.push.apply(p_xdata, data['charts'][p]['data'][i]['x']);
+        p_ydata.push.apply(p_ydata, data['charts'][p]['data'][i]['y']);
+      }
+      parsed_data['report_barcode_rank_plot_data'] = JSON.stringify([p_xdata,p_ydata]);
     }
   }
 
