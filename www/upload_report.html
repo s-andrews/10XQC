@@ -23,7 +23,7 @@
         <a class="nav-link" href="index.html">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+        <a class="nav-link" href="about.html">About</a>
       </li>
     </ul>
     <ul class="navbar-nav mr-sm-2">
@@ -36,15 +36,18 @@
 
 <div class="container-fluid">
   <h1>Submit a Report</h1>
-  <p>When you click submit your web browser will process the data contained and show a second form,
+  <div class="alert alert-info">When you click submit your web browser will process the data contained and show a form,
      autofilled with values from the report.<br>
-     Your report file will not be uploaded to the 10XQC server and you will be able to review all data before submission.</p>
+     Your report file will not be uploaded to the 10XQC server and you will be able to review all data before submission.</div>
 
   <div class="card mb-4" id="report_upload_form_div">
-    <form id="report_upload_form" class="card-block form-inline" method="post" action="" enctype="multipart/form-data">
-      <input type="file" class="form-control-file" id="report_upload_file">
-      <button type="submit" class="btn btn-primary" id="report_upload_submit_btn">Submit</button>
-    </form>
+    <div class="card-block">
+      <form id="report_upload_form" class="form-inline" method="post" action="" enctype="multipart/form-data">
+        <input type="file" class="form-control-file" id="report_upload_file">
+        <button type="submit" class="btn btn-primary" id="report_upload_submit_btn">Submit</button>
+      </form>
+      <p class="mt-2 mb-0 text-muted">Please select your 10X Cell Ranger Summary HTML Report file.</p>
+    </div>
   </div>
 
   <form id="report_metadata_form" method="post" action="10xqc_save.cgi" style="display:none;">
