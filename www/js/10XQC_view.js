@@ -9,26 +9,29 @@ $(function() {
   $.getJSON('api/fields.json', function(ajax_data){
 
     // Make columns data global
-    c_data = ajax_data;
-
-    // Populate the "choose columns" modal
-    for (var i = 0; i < c_data['columns'].length; i++) {
+    c_data = ajax_data['columns'];
+    var default_columns = [];
+    for (var i = 0; i < c_data.length; i++) {
+      // Populate the "choose columns" modal
       var checked = '';
       var ch_class = '';
-      if(c_data['default_columns'].indexOf(c_data['columns'][i]) > -1){
+      if(c_data[i][3] > 0){
         checked = 'checked="checked"';
         ch_class = 'class="table-success"';
+        default_columns.push(c_data[i]);
       }
       $('#table_columns_modal_table tbody').append('\
         <tr '+ch_class+'>\
-          <td class="text-center"><input type="checkbox" name="'+c_data['columns'][i]+'" id="'+c_data['columns'][i]+'" '+checked+'></td>\
-          <td><label for="'+c_data['columns'][i]+'">'+c_data['column_long_titles'][i]+'</label></td>\
+          <td class="text-center"><input type="checkbox" name="'+c_data[i][0]+'" id="'+c_data[i][0]+'" '+checked+'></td>\
+          <td><label for="'+c_data[i][0]+'">'+c_data[i][2]+'</label></td>\
         </tr>\
       ');
+      // Populate the plot category dropdowns
+      $('#plot_modal_cat_1, #plot_modal_cat_2').append('<option value="'+c_data[i][0]+'">'+c_data[i][1]+'</option>')
     }
 
     // Build the basic table for DataTables
-    build_datatables_table(c_data['default_columns']);
+    build_datatables_table(default_columns);
 
   });
 
@@ -59,21 +62,20 @@ function build_datatables_table(columns){
     s_datatable.destroy();
     $("#sample_browse_table").empty();
     $("#sample_browse_table_wrapper").empty();
-    $("#sample_browse_table_wrapper").html('<h1>OVER HERE!</h1><table id="sample_browse_table" class="display compact" cellspacing="0" width="100%"></table>');
+    $("#sample_browse_table_wrapper").html('<table id="sample_browse_table" class="display compact" cellspacing="0" width="100%"></table>');
   }
 
   // Get columns for the table
   dt_cols = [];
   for (var i = 0; i < columns.length; i++) {
-    var c_title = c_data['column_titles'][ c_data['columns'].indexOf(columns[i]) ];
-    dt_cols.push({'title': c_title});
+    dt_cols.push({'title': columns[i][1], 'data':columns[i][0], 'type': 'num'});
   }
 
   // Initialise DataTables
   s_datatable = $('#sample_browse_table').DataTable( {
-    // "ajax": 'api/browse.json' // static testing file
+    ajax: 'api/browse.json', // static testing file
     columns: dt_cols,
-    orderCellsTop: true,
+    scrollX: '100%',
     dom: 'lBfrtip',
     buttons: [{
       text: 'Choose Columns',

@@ -43,7 +43,7 @@
         <h1 class="display-1">10XQC</h1>
         <p class="lead">Submit your 10X Cell Ranger&reg; report and compare to data from 1256 other reports,
           contributed by other users from across the globe.</p>
-        <p>This tool was developed to allow users of 10X Genomics single-cell 3'mRNA-seq technology to share their
+        <p class="hidden-xs-down text-muted">This tool was developed to allow users of 10X Genomics single-cell 3'mRNA-seq technology to share their
         experiences. By uploading some simple metadata from your experiment's Cell Ranger report you can gain
         access to a pool of knowledge, compare your run against others that have used similar experimental conditions, and
         determine how well your experiment has worked.</p>
@@ -52,19 +52,26 @@
         <img src="images/chromium.png" title="10X Chromium" class="mb-4">
         <p><a href="upload_report.html" class="btn btn-success">Submit Report</a></p>
         <p class="text-muted" style="line-height:1;"><small>
-          You will not be asked to submit any sensitive information:
+          You will not be asked to submit any sensitive information.
           10X Cell Ranger reports are not saved on the website.</small></p>
       </div>
     </div>
   </div>
 
-  <h2 class="mb-4" id="browse">
-    <span class="float-right">
-      <button class="btn btn-outline-primary">Plot Metadata</button>
-      <button class="btn btn-outline-primary">Plot UMI Counts vs Barcodes</button>
-    </span>
-    Browse Sample Metadata
-  </h2>
+  <div class="row mb-4">
+    <div class="col">
+      <h2 id="browse">Browse Sample Metadata</h2>
+    </div>
+    <div class="col-md-6 text-right">
+      <button id="plot_metadata_btn" class="btn btn-outline-primary">Plot Metadata</button>
+      <button id="plot_umi_barcodes_btn" class="btn btn-outline-primary">Plot UMI Counts vs Barcodes</button>
+    </div>
+  </div>
+
+  <p>You can explore the metadata from contributed reports below.
+    To show different fields, click the
+    <em><a href="#table_columns_modal" role="button" data-toggle="modal" data-target="#table_columns_modal">Choose Columns</a></em>
+    button.</p>
   <div class="sample_browse_table_wrapper">
     <table id="sample_browse_table" class="display compact" cellspacing="0" width="100%"></table>
   </div>
@@ -108,6 +115,36 @@
   </div>
 </div>
 
+<!-- Plot Modal -->
+<div class="modal fade" id="plot_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <p>This plot shows the number of UMIs detected for each barcode, a plot also known
+            as the "double knee" curve.</p>
+            <p><strong>TODO: Write better text here.</strong></p>
+            <p>The plot shows samples currently visible in the Browse table (first page only).</p>
+            <p><strong>TODO: This is currently a lie (static data).</strong></p>
+            <form>
+              <label id="plot_modal_cat_label" for="plot_modal_cat_1">Category:</label>
+              <select id="plot_modal_cat_1" class="form-control" style="display:none;"></select>
+              <select id="plot_modal_cat_2" class="form-control" style="display:none;"></select>
+            </form>
+          </div>
+          <div class="col plot_modal_plotdiv_wrapper">
+            <div id="plot_modal_plotdiv"><p class="text-muted text-center">Loading..</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- jQuery first, then Tether, then Bootstrap JS. -->
 <script src="https:////code.jquery.com/jquery-1.12.4.js"></script>
@@ -115,6 +152,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="js/10XQC_view.js"></script>
+<script src="js/10XQC_plot.js"></script>
 </body>
 </html>

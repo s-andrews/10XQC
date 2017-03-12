@@ -1,3 +1,41 @@
 {
-  "data": []
+  "data": [
+    {
+      "DT_RowId": "d46c9350c45c2360f119814f8d4220607eb6f37e",
+      "meta_species":"Homo sapiens",
+      "meta_sequencing_technology":"Illumina - HiSeq 3000/4000",
+      "meta_num_cells_loaded":"1000",
+      "meta_cell_counting_method":"hemocytometer",
+      "meta_cell_state":"Fresh",
+      "meta_sample_type":"Cell line - suspension",
+      "meta_cell_line_tissue":"GM12878",
+      "meta_tissue_dissociation":"No",
+      "meta_min_cell_size":"12",
+      "meta_max_cell_size":"8",
+      "meta_scrnaseq_method":"10X Genomics 3'mRNA v2",
+      "report_file_hash":"d46c9350c45c2360f119814f8d4220607eb6f37e",
+      "report_sample_id":"NPY2",
+      "report_sample_desc":"",
+      "report_chemistry_description":"Single Cell 3' v2",
+      "report_transcriptome":"mm10",
+      "report_version":"1.2.1",
+      "report_estimated_number_of_cells":"416",
+      "report_mean_reads_per_cell":"2757470",
+      "report_median_genes_per_cell":"3395",
+      "report_number_of_reads":"1147107630",
+      "report_valid_barcodes":"98.4",
+      "report_reads_mapped_confidently_to_transcriptome":"57.3",
+      "report_reads_mapped_confidently_to_exonic_regions":"60.6",
+      "report_reads_mapped_confidently_to_intronic_regions":"17.2",
+      "report_reads_mapped_confidently_to_intergenic_regions":"5.6",
+      "report_sequencing_saturation":"99.2",
+      "report_q30_bases_in_barcode":"98.3",
+      "report_q30_bases_in_rna_read":"76.1",
+      "report_q30_bases_in_sample_index":"96.6",
+      "report_q30_bases_in_umi":"98.2",
+      "report_fraction_reads_in_cells":"87.1",
+      "report_total_genes_detected":"17479",
+      "report_median_umi_counts_per_cell":"7735"
+    }
+  ]
 }
