@@ -34,7 +34,8 @@ function plot_umi_barcodes(){
     'name_col': sort_col,
     'samples': samples
   }
-  $.post('api/umi_barcode_plotdata.json', postdata).done(function(ajax_data) {
+  // $.post('api/umi_barcode_plotdata.json', postdata).done(function(ajax_data) { //TESTING
+  $.getJSON('api/umi_barcode_plotdata.json', function(ajax_data) {
     $('#plot_modal_plotdiv').empty();
     pdata = [];
     $.each(ajax_data['data'], function(idx, data){
