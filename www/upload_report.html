@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>10XQC - Single Cell QC Metrics for 10X Runs</title>
+  <meta name="description" content="10XQC - Single Cell QC Metrics for 10X Runs">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#top-navbar" aria-controls="top-navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="index.html">10XQC</a>
+
+  <div class="collapse navbar-collapse" id="top-navbar">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav mr-sm-2">
+      <li class="nav-item">
+        <a class="btn btn-outline-success" href="upload.html">Submit Report</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <h1>Submit a Report</h1>
+  <div class="alert alert-info">When you click submit your web browser will process the data contained and show a form,
+     autofilled with values from the report.<br>
+     Your report file will not be uploaded to the 10XQC server and you will be able to review all data before submission.</div>
+
+  <div class="card mb-4" id="report_upload_form_div">
+    <div class="card-block">
+      <form id="report_upload_form" class="form-inline" method="post" action="" enctype="multipart/form-data">
+        <input type="file" class="form-control-file" id="report_upload_file">
+        <button type="submit" class="btn btn-primary" id="report_upload_submit_btn">Submit</button>
+      </form>
+      <p class="mt-2 mb-0 text-muted">Please select your 10X Cell Ranger Summary HTML Report file.</p>
+    </div>
+  </div>
+
+  <form id="report_metadata_form" method="post" action="10xqc_save.cgi" style="display:none;">
+
+    <!-- Manual Metadata -->
+    <div class="card mb-4">
+      <div class="card-block">
+        <h4 class="card-title">Manual metadata fields</h4>
+        <h6 class="card-subtitle mb-4 text-muted">You must fill these fields out manually.</h6>
+
+        <div class="form-group row">
+          <label for="meta_species" class="col-sm-4 col-form-label">Species</label>
+          <div class="col-sm-8">
+            <select id="meta_species" name="meta_species" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>Homo sapiens</option>
+              <option>Mus musculus</option>
+              <option>Anolis carolinensis</option>
+              <option>Arabidopsis thaliana</option>
+              <option>Caenorhabditis elegans</option>
+              <option>Callithrix jacchus</option>
+              <option>Canis familiaris</option>
+              <option>Cavia porcellus</option>
+              <option>Danio rerio</option>
+              <option>Dictyostelium discoideum</option>
+              <option>Drosophila melanogaster</option>
+              <option>Escherichia coli</option>
+              <option>Gallus gallus</option>
+              <option>Gorilla gorilla</option>
+              <option>Macaca mulatta</option>
+              <option>Monodelphis domestica</option>
+              <option>Nomascus leucogenys</option>
+              <option>Oryctolagus cuniculus</option>
+              <option>Pan troglodytes</option>
+              <option>Papio anubis</option>
+              <option>Phi X 174</option>
+              <option>Pongo abelii</option>
+              <option>Rattus norvegicus</option>
+              <option>Saccharomyces cerevisiae</option>
+              <option>Tetraodon nigroviridis</option>
+              <option>Xenopus laevis</option>
+              <option>Xenopus tropicalis</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_sequencing_technology" class="col-sm-4 col-form-label">Sequencing Technology</label>
+          <div class="col-sm-8">
+            <select id="meta_sequencing_technology" name="meta_sequencing_technology" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>Illumina - NovaSeq</option>
+              <option>Illumina - HiSeq X Ten</option>
+              <option>Illumina - HiSeq 3000/4000</option>
+              <option>Illumina - HiSeq 1500/2500</option>
+              <option>Illumina - HiSeq 2000</option>
+              <option>Illumina - Genome Analyser</option>
+              <option>Illumina - MiSeq</option>
+              <option>Illumina - MiSeq DX</option>
+              <option>Illumina - NextSeq</option>
+              <option>Illumina - MiniSeq</option>
+              <option>Ion Torrent - S5000</option>
+              <option>Ion Torrent - Proton</option>
+              <option>Ion Torrent - PGM</option>
+              <option>454 - GSFLX</option>
+              <option>LifeTech - SOLiD</option>
+              <option>Pacific Biosciences - SEQUEL</option>
+              <option>Pacific Biosciences - RSII</option>
+              <option>Oxford Nanopore - MinION</option>
+              <option>Oxford Nanopore - PromethION</option>
+              <option>Other*</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_num_cells_loaded" class="col-sm-4 col-form-label">Estimated number of cells loaded</label>
+          <div class="col-sm-8">
+            <input id="meta_num_cells_loaded" name="meta_num_cells_loaded" class="form-control" type="number" placeholder="# cells loaded" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_cell_counting_method" class="col-sm-4 col-form-label">Cell counting technology</label>
+          <div class="col-sm-8">
+            <select id="meta_cell_counting_method" name="meta_cell_counting_method" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>Life-Tech Countess II</option>
+              <option>hemocytometer</option>
+              <option>Flow cytometry</option>
+              <option>Orflo - Moxi Z</option>
+              <option>Manual</option>
+              <option>Other</option>
+              <option>NA</option>
+              <option>Bio-Rad TC20</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_cell_state" class="col-sm-4 col-form-label">Cell State</label>
+          <div class="col-sm-8">
+            <select id="meta_cell_state" name="meta_cell_state" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>Fresh</option>
+              <option>Frozen</option>
+              <option>Fixed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_sample_type" class="col-sm-4 col-form-label">Sample type</label>
+          <div class="col-sm-8">
+            <select id="meta_sample_type" name="meta_sample_type" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>Cell line - suspension</option>
+              <option>Cell line - adherent</option>
+              <option>Primary tissue</option>
+              <option>Xenograft</option>
+              <option>FFPE</option>
+              <option>Nuclei</option>
+              <option>Protoplast</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_cell_line_tissue" class="col-sm-4 col-form-label">Cell Line / Tissue Type</label>
+          <div class="col-sm-8">
+            <input id="meta_cell_line_tissue" name="meta_cell_line_tissue" class="form-control" type="text" placeholder="Cell Line / Tissue Type" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_tissue_dissociation" class="col-sm-4 col-form-label">Tissue Dissociation</label>
+          <div class="col-sm-8">
+            <select id="meta_tissue_dissociation" name="meta_tissue_dissociation" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>Yes - enzymatic</option>
+              <option>Yes - physical</option>
+              <option>Yes - chemical</option>
+              <option>No</option>
+              <option>NA</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_min_cell_size" class="col-sm-4 col-form-label">Min cell size (&mu;m)</label>
+          <div class="col-sm-8">
+            <input id="meta_min_cell_size" name="meta_min_cell_size" class="form-control" type="number" placeholder="Min cell size" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_max_cell_size" class="col-sm-4 col-form-label">Max cell size (&mu;m)</label>
+          <div class="col-sm-8">
+            <input id="meta_max_cell_size" name="meta_max_cell_size" class="form-control" type="number" placeholder="Max cell size" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="meta_scrnaseq_method" class="col-sm-4 col-form-label">scRNA-Seq method</label>
+          <div class="col-sm-8">
+            <select id="meta_scrnaseq_method" name="meta_scrnaseq_method" class="form-control" required>
+              <option value="">[ please select ]</option>
+              <option>10X Genomics 3'mRNA v1</option>
+              <option>10X Genomics 3'mRNA v2</option>
+              <option>Drop-Seq</option>
+              <option>InDrop</option>
+              <option>Wafergen</option>
+              <option>Fluidigm C1</option>
+              <option>Smart-Seq v1</option>
+              <option>Smart-Seq v2</option>
+              <option>Home Brew</option>
+              <option>SEQ-well</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fields autofilled from report upload -->
+    <div class="card mb-4">
+      <div class="card-block">
+        <h4 class="card-title">Metadata fields from report</h4>
+        <h6 class="card-subtitle mb-4 text-muted">These fields were automatically filled by parsing the report that you submitted.</h6>
+
+        <div id="report_fields_div"></div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary btn-lg btn-block mb-4">Submit Data</button>
+  </form>
+
+</div>
+
+
+<footer>
+  <div class="container-fluid">
+    10XQC was written by <a href="http://phil.ewels.co.uk">Phil Ewels</a>,
+      <a href="http://www.babraham.ac.uk/science-services/bioinformatics/simon-andrews">Simon Andrews</a>
+      and <a href="http://enseqlopedia.com/">James Hadfield</a>.
+    This website and its authors are not affiliated with <a href="https://www.10xgenomics.com/">10X Genomics</a>.
+  </div>
+</footer>
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/sha1.min.js"></script>
+<script src="js/lz-string.min.js"></script>
+<script src="js/10XQC_submission.js"></script>
+</body>
+</html>
