@@ -73,3 +73,31 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
 #report_metadata_form .form-group.row:nth-child(odd){
   background-color: #ededed;
 }
+
+/* Report submission */
+#report_upload_form label {
+  display: block;
+}
+.box__dragndrop {
+  display: none;
+}
+.has-advanced-upload {
+  text-align: center;
+}
+.has-advanced-upload #report_upload_file,
+.has-advanced-upload #report_upload_submit_btn {
+  display: none;
+}
+.has-advanced-upload .box__dragndrop,
+.has-advanced-upload label {
+  display: inline;
+}
+.has-advanced-upload label {
+  margin: 8px 0;
+}
+.is-dragover {
+  background-color: #dff0d8;
+}
+
+
+

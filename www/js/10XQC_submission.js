@@ -1,31 +1,83 @@
 // 10XQC JavaScript - Submitting Reports
 $(function() {
 
+  var $form = $("#report_upload_form");
+  var $input = $('#report_upload_file');
+  var $label = $('#report_upload_form label');
+
+  // Batch file drag & drop interface
+  // https://css-tricks.com/drag-and-drop-file-uploading/
+  var isAdvancedUpload = function() {
+    var div = document.createElement('div');
+    return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+  }();
+
+  var droppedFiles = false;
+  if (isAdvancedUpload) {
+    $form.addClass('has-advanced-upload');
+    $form.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    })
+    .on('dragover dragenter', function() {
+      $form.addClass('is-dragover');
+    })
+    .on('dragleave dragend drop', function() {
+      $form.removeClass('is-dragover');
+    })
+    .on('drop', function(e) {
+      droppedFiles = e.originalEvent.dataTransfer.files;
+      console.log(droppedFiles);
+      $form.trigger('submit');
+    });
+  }
+
+  // Manual submit button
+  $input.on('change', function(e) {
+    $form.trigger('submit');
+  });
+
   // Catch report uploads and process in the browser
-  $("#report_upload_form").submit(function(e) {
+  $form.submit(function(e) {
 
     // Don't submit the form to the server
     e.preventDefault();
 
-    // Process the file client side
-    var file = $('#report_upload_file')[0]['files'][0];
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      // First, entire file is in base64
-      var matches = e.target.result.match(/^data:text\/html;base64,(.*)$/);
-      var base64_data = matches[1];
-      var file_hash = sha1(base64_data);
-      var raw_report = atob(base64_data, 'base64');
+    // Loading text
+    $label.text('Processing..');
 
-      // Pull out the compressed data
-      var compressed_data_matches = raw_report.match(/var compressed_data = '([^']+)';/);
-      var compressed_data = compressed_data_matches[1];
+    // Simple input field uploads
+    if(!isAdvancedUpload || !droppedFiles){
+      droppedFiles = [$input[0]['files'][0]];
+    }
 
-      // Decompress the data and pass on to form
-      var data = JSON.parse(LZString.decompressFromEncodedURIComponent(compressed_data));
-      second_form(data, file_hash);
-    };
-    reader.readAsDataURL(file);
+    // Process each file upload
+    var parsed_data = [];
+    $.each(droppedFiles, function(idx, file){
+
+      // Set up JS file reader
+      var reader = new FileReader();
+      reader.onload = function (e) {
+
+        // First, entire file is in base64
+        var matches = e.target.result.match(/^data:text\/html;base64,(.*)$/);
+        var base64_data = matches[1];
+        var file_hash = sha1(base64_data);
+        var raw_report = atob(base64_data, 'base64');
+
+        // Pull out the compressed data
+        var compressed_data_matches = raw_report.match(/var compressed_data = '([^']+)';/);
+        var compressed_data = compressed_data_matches[1];
+
+        // Decompress the data and pass on to form
+        var data = JSON.parse(LZString.decompressFromEncodedURIComponent(compressed_data));
+        parsed_data.append([data, file_hash]);
+        if(parsed_data.length == droppedFiles.length){
+          second_form(parsed_data);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   });
 
 
@@ -55,7 +107,10 @@ $(function() {
 
 });
 
-function second_form(data, file_hash){
+function second_form(parsed_data){
+  // TODO - rewrite for multiple file submissions
+  // TODO - csv download / upload alternative
+  // parsed_data = [[data, file_hash], [data, file_hash]]
   var report_field_ids = [
     'report_file_hash',
     'report_sample_id',
