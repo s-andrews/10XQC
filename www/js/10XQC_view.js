@@ -26,8 +26,12 @@ $(function() {
           <td><label for="'+c_data[i][0]+'">'+c_data[i][2]+'</label></td>\
         </tr>\
       ');
-      // Populate the plot category dropdowns
-      $('#plot_modal_cat_1, #plot_modal_cat_2').append('<option value="'+c_data[i][0]+'">'+c_data[i][1]+'</option>')
+      // Populate the UMI plot category dropdowns
+      $('#umi_plot_modal_cat_1, #umi_plot_modal_cat_2').append('<option value="'+c_data[i][0]+'">'+c_data[i][1]+'</option>');
+      // Populate the scatter plot dropdowns if numeric
+      if(c_data[i][4]){
+        $('#table_plot_modal_yaxis, #table_plot_modal_xaxis').append('<option value="'+c_data[i][0]+'">'+c_data[i][1]+'</option>');
+      }
     }
 
     // Build the basic table for DataTables

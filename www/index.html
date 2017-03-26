@@ -119,8 +119,8 @@
   </div>
 </div>
 
-<!-- Plot Modal -->
-<div class="modal fade" id="plot_modal" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- UMI / Barcode Plot Modal -->
+<div class="modal fade" id="umi_plot_modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-body">
@@ -132,14 +132,47 @@
             <p>The plot shows samples currently visible in the Browse table (first page only).</p>
             <p><strong>TODO: This is currently a lie (static data).</strong></p>
             <form>
-              <label id="plot_modal_cat_label" for="plot_modal_cat_1">Category:</label>
-              <select id="plot_modal_cat_1" class="form-control" style="display:none;"></select>
-              <select id="plot_modal_cat_2" class="form-control" style="display:none;"></select>
+              <label id="umi_plot_modal_cat_label" for="umi_plot_modal_cat_1">Category:</label>
+              <select id="umi_plot_modal_cat_1" class="form-control" style="display:none;"></select>
+              <select id="umi_plot_modal_cat_2" class="form-control" style="display:none;"></select>
             </form>
           </div>
-          <div class="col plot_modal_plotdiv_wrapper">
-            <div id="plot_modal_plotdiv"><p class="text-muted text-center">Loading..</p></div>
+          <div class="col umi_plot_modal_plotdiv_wrapper">
+            <div id="umi_plot_modal_plotdiv"><p class="text-muted text-center">Loading..</p></div>
           </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plot datatable columns against each other modal -->
+<div class="modal fade" id="table_plot_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form>
+          <div class="form-group row">
+            <label for="table_plot_modal_yaxis" class="col-sm-2 col-form-label">Y-Axis:</label>
+            <div class="col-sm-4">
+              <select class="form-control" id="table_plot_modal_yaxis">
+                <option value="">[ select category ]</option>
+              </select>
+            </div>
+            <label for="table_plot_modal_xaxis" class="col-sm-2 col-form-label">X-Axis:</label>
+            <div class="col-sm-4">
+              <select class="form-control" id="table_plot_modal_xaxis">
+                <option value="">[ select category ]</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <div class="alert alert-warning">This feature is under construction - sorry!</div>
+        <div class="col table_plot_modal_plotdiv_wrapper">
+          <div id="table_plot_modal_plotdiv"><p class="text-muted text-center">Select columns to compare</p></div>
         </div>
       </div>
       <div class="modal-footer">
