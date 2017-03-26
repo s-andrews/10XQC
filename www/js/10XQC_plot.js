@@ -1,4 +1,4 @@
-// 10XQC JavaScript - Plot Stuff
+// 10XQC JavaScript - Plot stuff on homepage
 
 $(function() {
   // Listeners
