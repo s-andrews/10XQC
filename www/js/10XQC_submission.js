@@ -298,6 +298,10 @@ function second_form(parsed_data, failed_files){
     }
   }
 
+  // Download as CSV for offline processing
+  // TODO: Not written yet!
+  $('#manual_metadata_download').hide();
+
   // Show the form!
   $('#report_upload_form_div').slideUp();
   $('#report_metadata_form').slideDown();
