@@ -1,6 +1,9 @@
 body {
   padding-bottom: 2rem;
 }
+button {
+  cursor: pointer;
+}
 nav.navbar {
   background-color:#1e2e56;
   margin-bottom: 1rem;
@@ -72,4 +75,40 @@ table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
 }
 #report_metadata_form .form-group.row:nth-child(odd){
   background-color: #ededed;
+}
+
+/* Report submission */
+#report_upload_form label {
+  display: block;
+}
+.box__dragndrop {
+  display: none;
+}
+.has-advanced-upload {
+  text-align: center;
+}
+.has-advanced-upload #report_upload_file,
+.has-advanced-upload #report_upload_submit_btn {
+  display: none;
+}
+.has-advanced-upload .box__dragndrop,
+.has-advanced-upload label {
+  display: inline;
+}
+.has-advanced-upload label {
+  margin: 8px 0;
+}
+.req {
+  color: #a94442;
+}
+#manual_metadata_table th, #manual_metadata_table .col-form-label, #manual_metadata_table .form-control,
+#report_fields_table th, #report_fields_table .col-form-label, #report_fields_table .form-control {
+  font-size: 0.8rem;
+}
+#manual_metadata_table .form-group {
+  margin-bottom: 0;
+}
+#manual_metadata_table .form-group.has-danger select,
+#manual_metadata_table .form-group.has-danger input {
+  background-color: #f2dede;
 }

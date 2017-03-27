@@ -7,6 +7,7 @@
   <meta name="description" content="10XQC - Single Cell QC Metrics for 10X Runs">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -36,190 +37,218 @@
 
 <div class="container-fluid">
   <h1>Submit a Report</h1>
-  <div class="alert alert-info">When you click submit your web browser will process the data contained and show a form,
-     autofilled with values from the report.<br>
-     Your report file will not be uploaded to the 10XQC server and you will be able to review all data before submission.</div>
+  <p>When you submit reports, your web browser will process the data contained and show a new form,
+     autofilled with values from the reports.<br>
+     Your report files will not be uploaded to the 10XQC server and you will be able to review all data before submission.</p>
 
   <div class="card mb-4" id="report_upload_form_div">
-    <div class="card-block">
-      <form id="report_upload_form" class="form-inline" method="post" action="" enctype="multipart/form-data">
-        <input type="file" class="form-control-file" id="report_upload_file">
-        <button type="submit" class="btn btn-primary" id="report_upload_submit_btn">Submit</button>
-      </form>
-      <p class="mt-2 mb-0 text-muted">Please select your 10X Cell Ranger Summary HTML Report file.</p>
-    </div>
+    <form id="report_upload_form" class="alert alert-info" method="post" action="" enctype="multipart/form-data">
+      <i class="fa fa-download fa-3x box__dragndrop" aria-hidden="true"></i>
+      <input type="file" class="form-control-file" id="report_upload_file">
+      <label for="report_upload_file"><strong>Please select</strong><span class="box__dragndrop"> or drag and drop</span> your 10X Cell Ranger Summary HTML Report file<span class="box__dragndrop">s here</span>.</label>
+      <button type="submit" class="btn btn-primary" id="report_upload_submit_btn">Submit</button>
+    </form>
   </div>
 
-  <form id="report_metadata_form" method="post" action="10xqc_save.cgi" style="display:none;">
+  <div id="report_metadata_failure_alert" class="alert alert-danger" style="display:none;">
+    <h4 class="alert-heading">Files not parsed</h4>
+    <p>Apologies, the following files could not be parsed:</p>
+    <ul></ul>
+    <p>Please confirm that they are
+      <a href="https://support.10xgenomics.com/single-cell/software/pipelines/latest/output/summary" target="_blank">HTML run summary reports</a>
+       from 10X Cell Ranger (typically called <code>web_summary.html</code>).</p>
+    <p><span class="report_metadata_failure_continue" style="display:none;">If these files were a mistake, please continue with the below data. Otherwise, please reload the page and try again.</span>
+      <span class="report_metadata_failure_complete" style="display:none;">Please reload the page and try again.</span>
+      If the problem persists, please <a href="about.html" target="_blank">let us know</a>.</p>
+  </div>
+
+  <form id="report_metadata_form" method="post" action="submit.php" style="display:none;">
+
+    <div class="alert alert-info">Remember to press Submit at the bottom when you're finished!</div>
+    <div class="alert alert-danger" id="validation_errors" style="display:none;">Some required fields were missing. Please fill in and press submit again.</div>
 
     <!-- Manual Metadata -->
     <div class="card mb-4">
       <div class="card-block">
-        <h4 class="card-title">Manual metadata fields</h4>
+        <h4 class="card-title">
+          <div class="float-right">
+            <button class="btn btn-secondary" id="manual_metadata_download">Fill in offline (in Excel)</button>
+            <button class="btn btn-primary" id="manual_metadata_copyvals">Copy values in first column across to all</button>
+          </div>
+          Manual metadata fields
+        </h4>
         <h6 class="card-subtitle mb-4 text-muted">You must fill these fields out manually.</h6>
 
-        <div class="form-group row">
-          <label for="meta_species" class="col-sm-4 col-form-label">Species</label>
-          <div class="col-sm-8">
-            <select id="meta_species" name="meta_species" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>Homo sapiens</option>
-              <option>Mus musculus</option>
-              <option>Anolis carolinensis</option>
-              <option>Arabidopsis thaliana</option>
-              <option>Caenorhabditis elegans</option>
-              <option>Callithrix jacchus</option>
-              <option>Canis familiaris</option>
-              <option>Cavia porcellus</option>
-              <option>Danio rerio</option>
-              <option>Dictyostelium discoideum</option>
-              <option>Drosophila melanogaster</option>
-              <option>Escherichia coli</option>
-              <option>Gallus gallus</option>
-              <option>Gorilla gorilla</option>
-              <option>Macaca mulatta</option>
-              <option>Monodelphis domestica</option>
-              <option>Nomascus leucogenys</option>
-              <option>Oryctolagus cuniculus</option>
-              <option>Pan troglodytes</option>
-              <option>Papio anubis</option>
-              <option>Phi X 174</option>
-              <option>Pongo abelii</option>
-              <option>Rattus norvegicus</option>
-              <option>Saccharomyces cerevisiae</option>
-              <option>Tetraodon nigroviridis</option>
-              <option>Xenopus laevis</option>
-              <option>Xenopus tropicalis</option>
-              <option>Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_sequencing_technology" class="col-sm-4 col-form-label">Sequencing Technology</label>
-          <div class="col-sm-8">
-            <select id="meta_sequencing_technology" name="meta_sequencing_technology" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>Illumina - NovaSeq</option>
-              <option>Illumina - HiSeq X Ten</option>
-              <option>Illumina - HiSeq 3000/4000</option>
-              <option>Illumina - HiSeq 1500/2500</option>
-              <option>Illumina - HiSeq 2000</option>
-              <option>Illumina - Genome Analyser</option>
-              <option>Illumina - MiSeq</option>
-              <option>Illumina - MiSeq DX</option>
-              <option>Illumina - NextSeq</option>
-              <option>Illumina - MiniSeq</option>
-              <option>Ion Torrent - S5000</option>
-              <option>Ion Torrent - Proton</option>
-              <option>Ion Torrent - PGM</option>
-              <option>454 - GSFLX</option>
-              <option>LifeTech - SOLiD</option>
-              <option>Pacific Biosciences - SEQUEL</option>
-              <option>Pacific Biosciences - RSII</option>
-              <option>Oxford Nanopore - MinION</option>
-              <option>Oxford Nanopore - PromethION</option>
-              <option>Other*</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_num_cells_loaded" class="col-sm-4 col-form-label">Estimated number of cells loaded</label>
-          <div class="col-sm-8">
-            <input id="meta_num_cells_loaded" name="meta_num_cells_loaded" class="form-control" type="number" placeholder="# cells loaded" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_cell_counting_method" class="col-sm-4 col-form-label">Cell counting technology</label>
-          <div class="col-sm-8">
-            <select id="meta_cell_counting_method" name="meta_cell_counting_method" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>Life-Tech Countess II</option>
-              <option>hemocytometer</option>
-              <option>Flow cytometry</option>
-              <option>Orflo - Moxi Z</option>
-              <option>Manual</option>
-              <option>Other</option>
-              <option>NA</option>
-              <option>Bio-Rad TC20</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_cell_state" class="col-sm-4 col-form-label">Cell State</label>
-          <div class="col-sm-8">
-            <select id="meta_cell_state" name="meta_cell_state" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>Fresh</option>
-              <option>Frozen</option>
-              <option>Fixed</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_sample_type" class="col-sm-4 col-form-label">Sample type</label>
-          <div class="col-sm-8">
-            <select id="meta_sample_type" name="meta_sample_type" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>Cell line - suspension</option>
-              <option>Cell line - adherent</option>
-              <option>Primary tissue</option>
-              <option>Xenograft</option>
-              <option>FFPE</option>
-              <option>Nuclei</option>
-              <option>Protoplast</option>
-              <option>Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_cell_line_tissue" class="col-sm-4 col-form-label">Cell Line / Tissue Type</label>
-          <div class="col-sm-8">
-            <input id="meta_cell_line_tissue" name="meta_cell_line_tissue" class="form-control" type="text" placeholder="Cell Line / Tissue Type" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_tissue_dissociation" class="col-sm-4 col-form-label">Tissue Dissociation</label>
-          <div class="col-sm-8">
-            <select id="meta_tissue_dissociation" name="meta_tissue_dissociation" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>Yes - enzymatic</option>
-              <option>Yes - physical</option>
-              <option>Yes - chemical</option>
-              <option>No</option>
-              <option>NA</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_min_cell_size" class="col-sm-4 col-form-label">Min cell size (&mu;m)</label>
-          <div class="col-sm-8">
-            <input id="meta_min_cell_size" name="meta_min_cell_size" class="form-control" type="number" placeholder="Min cell size" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_max_cell_size" class="col-sm-4 col-form-label">Max cell size (&mu;m)</label>
-          <div class="col-sm-8">
-            <input id="meta_max_cell_size" name="meta_max_cell_size" class="form-control" type="number" placeholder="Max cell size" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="meta_scrnaseq_method" class="col-sm-4 col-form-label">scRNA-Seq method</label>
-          <div class="col-sm-8">
-            <select id="meta_scrnaseq_method" name="meta_scrnaseq_method" class="form-control" required>
-              <option value="">[ please select ]</option>
-              <option>10X Genomics 3'mRNA v1</option>
-              <option>10X Genomics 3'mRNA v2</option>
-              <option>Drop-Seq</option>
-              <option>InDrop</option>
-              <option>Wafergen</option>
-              <option>Fluidigm C1</option>
-              <option>Smart-Seq v1</option>
-              <option>Smart-Seq v2</option>
-              <option>Home Brew</option>
-              <option>SEQ-well</option>
-            </select>
-          </div>
-        </div>
+        <table id="manual_metadata_table" class="table table-bordered table-striped table-sm table-hover">
+          <thead>
+            <th>&nbsp;</th>
+            <th>Sample 1</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><label for="meta_species_0" class="col-form-label">Species <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_species_0" name="meta_species_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>Homo sapiens</option>
+                  <option>Mus musculus</option>
+                  <option>Anolis carolinensis</option>
+                  <option>Arabidopsis thaliana</option>
+                  <option>Caenorhabditis elegans</option>
+                  <option>Callithrix jacchus</option>
+                  <option>Canis familiaris</option>
+                  <option>Cavia porcellus</option>
+                  <option>Danio rerio</option>
+                  <option>Dictyostelium discoideum</option>
+                  <option>Drosophila melanogaster</option>
+                  <option>Escherichia coli</option>
+                  <option>Gallus gallus</option>
+                  <option>Gorilla gorilla</option>
+                  <option>Macaca mulatta</option>
+                  <option>Monodelphis domestica</option>
+                  <option>Nomascus leucogenys</option>
+                  <option>Oryctolagus cuniculus</option>
+                  <option>Pan troglodytes</option>
+                  <option>Papio anubis</option>
+                  <option>Phi X 174</option>
+                  <option>Pongo abelii</option>
+                  <option>Rattus norvegicus</option>
+                  <option>Saccharomyces cerevisiae</option>
+                  <option>Tetraodon nigroviridis</option>
+                  <option>Xenopus laevis</option>
+                  <option>Xenopus tropicalis</option>
+                  <option>Other</option>
+                </select>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_sequencing_technology_0" class="col-form-label">Sequencing Technology <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_sequencing_technology_0" name="meta_sequencing_technology_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>Illumina - NovaSeq</option>
+                  <option>Illumina - HiSeq X Ten</option>
+                  <option>Illumina - HiSeq 3000/4000</option>
+                  <option>Illumina - HiSeq 1500/2500</option>
+                  <option>Illumina - HiSeq 2000</option>
+                  <option>Illumina - Genome Analyser</option>
+                  <option>Illumina - MiSeq</option>
+                  <option>Illumina - MiSeq DX</option>
+                  <option>Illumina - NextSeq</option>
+                  <option>Illumina - MiniSeq</option>
+                  <option>Ion Torrent - S5000</option>
+                  <option>Ion Torrent - Proton</option>
+                  <option>Ion Torrent - PGM</option>
+                  <option>454 - GSFLX</option>
+                  <option>LifeTech - SOLiD</option>
+                  <option>Pacific Biosciences - SEQUEL</option>
+                  <option>Pacific Biosciences - RSII</option>
+                  <option>Oxford Nanopore - MinION</option>
+                  <option>Oxford Nanopore - PromethION</option>
+                  <option>Other*</option>
+                </select>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_num_cells_loaded_0" class="col-form-label">Estimated number of cells loaded <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <input id="meta_num_cells_loaded_0" name="meta_num_cells_loaded_0" class="form-control" type="number" placeholder="# cells loaded" required>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_cell_counting_method_0" class="col-form-label">Cell counting technology <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_cell_counting_method_0" name="meta_cell_counting_method_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>Life-Tech Countess II</option>
+                  <option>hemocytometer</option>
+                  <option>Flow cytometry</option>
+                  <option>Orflo - Moxi Z</option>
+                  <option>Manual</option>
+                  <option>Other</option>
+                  <option>NA</option>
+                  <option>Bio-Rad TC20</option>
+                </select>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_cell_state_0" class="col-form-label">Cell State <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_cell_state_0" name="meta_cell_state_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>Fresh</option>
+                  <option>Frozen</option>
+                  <option>Fixed</option>
+                </select>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_sample_type_0" class="col-form-label">Sample type <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_sample_type_0" name="meta_sample_type_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>Cell line - suspension</option>
+                  <option>Cell line - adherent</option>
+                  <option>Primary tissue</option>
+                  <option>Xenograft</option>
+                  <option>FFPE</option>
+                  <option>Nuclei</option>
+                  <option>Protoplast</option>
+                  <option>Other</option>
+                </select>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_cell_line_tissue_0" class="col-form-label">Cell Line / Tissue Type <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <input id="meta_cell_line_tissue_0" name="meta_cell_line_tissue_0" class="form-control" type="text" placeholder="Cell Line / Tissue Type" required>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="meta_tissue_dissociation_0" class="col-form-label">Tissue Dissociation <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_tissue_dissociation_0" name="meta_tissue_dissociation_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>Yes - enzymatic</option>
+                  <option>Yes - physical</option>
+                  <option>Yes - chemical</option>
+                  <option>No</option>
+                  <option>NA</option>
+                </select>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_min_cell_size_0" class="col-form-label">Min cell size (&mu;m) <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <input id="meta_min_cell_size_0" name="meta_min_cell_size_0" class="form-control" type="number" placeholder="Min cell size" required>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_max_cell_size_0" class="col-form-label">Max cell size (&mu;m) <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <input id="meta_max_cell_size_0" name="meta_max_cell_size_0" class="form-control" type="number" placeholder="Max cell size" required>
+              </div></td>
+            </tr>
+            <tr>
+              <td><label for="meta_scrnaseq_method_0" class="col-form-label">scRNA-Seq method <span class="req">*</span></label></td>
+              <td><div class="form-group">
+                <select id="meta_scrnaseq_method_0" name="meta_scrnaseq_method_0" class="form-control" required>
+                  <option value="">[ please select ]</option>
+                  <option>10X Genomics 3'mRNA v1</option>
+                  <option>10X Genomics 3'mRNA v2</option>
+                  <option>Drop-Seq</option>
+                  <option>InDrop</option>
+                  <option>Wafergen</option>
+                  <option>Fluidigm C1</option>
+                  <option>Smart-Seq v1</option>
+                  <option>Smart-Seq v2</option>
+                  <option>Home Brew</option>
+                  <option>SEQ-well</option>
+                </select>
+              </div></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -228,13 +257,23 @@
       <div class="card-block">
         <h4 class="card-title">Metadata fields from report</h4>
         <h6 class="card-subtitle mb-4 text-muted">These fields were automatically filled by parsing the report that you submitted.</h6>
-
-        <div id="report_fields_div"></div>
+        <table id="report_fields_table" class="table table-bordered table-striped table-sm table-hover">
+          <thead>
+            <th>&nbsp;</th>
+            <th>Sample 1</th>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Submit -->
-    <button type="submit" class="btn btn-primary btn-lg btn-block mb-4">Submit Data</button>
+    <div class="row justify-content-center">
+      <div class="col-sm-6">
+        <button type="submit" class="btn btn-primary btn-lg btn-block mb-4">Submit Data</button>
+      </div>
+    </div>
   </form>
 
 </div>
