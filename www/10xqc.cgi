@@ -3,237 +3,110 @@ use warnings;
 use strict;
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);
+use DBI;
 use FindBin qw($Bin);
-use HTTP::Template;
+use HTML::Template;
 
 # Read config
 my $config;
 
-# Make DB connection
-my $dbh;
+# Make DB connectionmy 
+my $dbh = DBI->connect("DBI:mysql:database=10xqc;host=localhost","10xqcuser","",{RaiseError=>0,AutoCommit=>1});
 
-# Direct the action
+unless ($dbh) {
+    die "Couldn't connect to database";
+}
 
-die "No action defined";
+# Get a CGI handle
+my $q = CGI -> new();
 
-## Subroutines below here...
 
-sub read_file {
+# These are the variables we need to fill
 
-	# This sub takes a file handle to a 10X file and parses
-	# out the various parameters we want to record.
-	# 
-	# It will store the results in the database and return the
-	# id of the newly created entry.
-	
-	# These are the fields we want to get:
-	my %variables = (
-		mean_reads_per_cell => undef,
-		median_genes_per_cell => undef,
-		number_of_reads => undef,
-		percent_valid_barcodes => undef,
-		percent_reads_mapped_to_transcriptome => undef,
-		percent_reads_mapped_to_exonic_regions => undef,
-		percent_reads_mapped_to_intronic_regions => undef,
-		percent_reads_mapped_to_intergenic_regions => undef,
-		percent_sequencing_saturation => undef,
-		percent_q30_bases_in_barcode => undef,
-		percent_q30_bases_in_rna_read => undef,
-		percent_q30_bases_in_sample_index => undef,
-		percent_q30_bases_in_umi => undef,
-		estimated_number_of_cells => undef,
-		percentage_fraction_reads_in_cells => undef,
-		mean_reads_per_cell => undef,
-		total_genes_detected => undef,
-		median_umi_counts_per_cell => undef,
-		transcriptome => undef,
-		chemistry => undef,
-		cell_ranger_version => undef,
-	);
-	
-	my ($fh) = @_;
+my @vars = qw(
+meta_cell_state
+report_reads_mapped_confidently_to_transcriptome
+report_file_hash
+report_q30_bases_in_sample_index
+report_q30_bases_in_barcode
+report_estimated_number_of_cells
+report_q30_bases_in_rna_read
+meta_sequencing_technology
+report_version
+report_median_umi_counts_per_cell
+report_transcriptome
+report_valid_barcodes
+report_sample_desc
+report_barcode_rank_plot_data
+report_mean_reads_per_cell
+meta_tissue_dissociation
+meta_scrnaseq_method
+report_reads_mapped_confidently_to_intergenic_regions
+meta_num_cells_loaded
+report_sample_id
+meta_cell_line_tissue
+report_q30_bases_in_umi
+meta_sample_type
+meta_cell_counting_method
+report_fraction_reads_in_cells
+report_total_genes_detected
+report_sequencing_saturation
+report_chemistry_description
+report_number_of_reads
+meta_species
+report_reads_mapped_confidently_to_intronic_regions
+meta_max_cell_size
+report_reads_mapped_confidently_to_exonic_regions
+meta_min_cell_size
+report_median_genes_per_cell
+);
 
-	# Yes, I know this is ugly.
-	# Yes, I know you shouldn't parse HTML with regexes.
-	# Meh - it works.
-	
-	while (<$fh>) {
-		
-		# Number of reads
-		if (index($_,'<td>Number of Reads</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d,]+)<\/td>/) {
-				$variables{number_of_reads} = $1;
-				$variables{number_of_reads} =~ s/,//g;
-			}
-		}
 
-		# Valid barcodes
-		elsif (index($_,'<td>Valid Barcodes</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_valid_barcodes} = $1;
-			}
-		}
+# Make up a submission STH
 
-		# Percent reads mapped to transcriptome
-		elsif (index($_,'<td>Reads Mapped Confidently to Transcriptome</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_reads_mapped_to_transcriptome} = $1;
-			}
-		}
-		
-		# Percent reads mapped to exonic regions
-		elsif (index($_,'<td>Reads Mapped Confidently to Exonic Regions</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_reads_mapped_to_exonic_regions} = $1;
-			}
-		}
-		
-		# Percent reads mapped to intronic regions
-		elsif (index($_,'<td>Reads Mapped Confidently to Intronic Regions</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_reads_mapped_to_intronic_regions} = $1;
-			}
-		}
+my $insert_sth =  $dbh->prepare("INSERT INTO report (".join(",",@vars).") VALUES (".("?,"x$#vars)."?)") or die "Can't create insert sth: $dbh->errstr()";
 
-		# Percent reads mapped to intronic regions
-		elsif (index($_,'<td>Reads Mapped Confidently to Intergenic Regions</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_reads_mapped_to_intergenic_regions} = $1;
-			}
-		}
+# See what we've got
 
-		# Sequencing Saturation
-		elsif (index($_,'<td>Sequencing Saturation</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_sequencing_saturation} = $1;
-			}
-		}
+# Now go through the submission and check how many reports we can submit
 
-		# Q30 Bases in Barcode
-		elsif (index($_,'<td>Q30 Bases in Barcode</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_q30_bases_in_barcode} = $1;
-			}
-		}
-		
-		# Q30 Bases in RNA Read
-		elsif (index($_,'<td>Q30 Bases in RNA Read</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_q30_bases_in_rna_read} = $1;
-			}
-		}
-		
-		# Q30 Bases in Sample Index
-		elsif (index($_,'<td>Q30 Bases in Sample Index</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_q30_bases_in_sample_index} = $1;
-			}
-		}
+my $report_number = 0;
 
-		# Q30 Bases in UMI
-		elsif (index($_,'<td>Q30 Bases in UMI</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percent_q30_bases_in_umi} = $1;
-			}
-		}
+my @warnings;
 
-		# Estimated Number of Cells
-		elsif (index($_,'<td>Estimated Number of Cells</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d,]+)<\/td>/) {
-				$variables{estimated_number_of_cells} = $1;
-			}
-		}
+while (1) {
 
-		# Fraction Reads in Cells
-		elsif (index($_,'<td>Fraction Reads in Cells</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)\%<\/td>/) {
-				$variables{percentage_fraction_reads_in_cells} = $1;
-			}
-		}
+    # Do a quick sanity check that this report exists
+    last unless ($q -> param("report_version_$report_number"));
 
-		# Mean Reads per Cell
-		elsif (index($_,'<td>Mean Reads per Cell</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d,]+)<\/td>/) {
-				$variables{mean_reads_per_cell} = $1;
-			}
-		}
-		
-		# Median Genes per Cell
-		elsif (index($_,'<td>Median Genes per Cell</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d,]+)<\/td>/) {
-				$variables{median_genes_per_cell} = $1;
-			}
-		}
+    my @bind_params;
 
-		# Total Genes Detected
-		elsif (index($_,'<td>Total Genes Detected</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d,]+)<\/td>/) {
-				$variables{total_genes_detected} = $1;
-			}
-		}
+    foreach my $var (@vars) {
+	my $value = $q -> param("${var}_$report_number");
 
-		# Median UMI Counts per Cell
-		elsif (index($_,'<td>Median UMI Counts per Cell</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d,]+)<\/td>/) {
-				$variables{median_umi_counts_per_cell} = $1;
-			}
-		}
-
-		# Cell Ranger Version
-		elsif (index($_,'<td>Cell Ranger Version</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([\d\.]+)<\/td>/) {
-				$variables{cell_ranger_version} = $1;
-			}
-		}
-
-		# Chemistry
-		elsif (index($_,'<td>Chemistry</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([^<]+)<\/td>/) {
-				$variables{chemistry} = $1;
-			}
-		}
-		
-		# Transcriptome
-		elsif (index($_,'<td>Transcriptome</td>') >=0) {
-			$_ = <$fh>;
-			if (/<td>([^<]+)<\/td>/) {
-				$variables{transcriptome} = $1;
-			}
-		}
-		
-	}
-	
-	foreach my $key (sort keys %variables) {
-		if ($variables{$key}) {
-			print "$key\t$variables{$key}\n";	
-		}
+	unless (defined $value) {
+	    push @warnings,"No value for $var in report $report_number\n";
 	}
 
-	foreach my $key (sort keys %variables) {
-		unless($variables{$key}) {
-			print "MISSING: $key\n";	
-		}
-	}
+	push @bind_params,$value;
+    } 
 
-	
-	
+    # Check the hash doesn't exist already
+
+
+    # Add the report
+    $insert_sth -> execute(@bind_params) or do {
+	push @warnings,"Failed to insert report $report_number: ".$dbh->errstr();
+    };
+
+    ++$report_number;
+
+}
+
+print "Content-type: text/plain\n\n";
+print "Submitted $report_number reports\n";
+
+
+foreach my $warning (@warnings) {
+    print "WARNING: $warning\n";
 }
