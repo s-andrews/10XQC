@@ -5,6 +5,7 @@ use CGI;
 use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 use FindBin qw($Bin);
+use JSON;
 use HTML::Template;
 
 # Read config
@@ -21,8 +22,7 @@ unless ($dbh) {
 my $q = CGI -> new();
 
 
-# These are the variables we need to fill
-
+# These are the variables we're dealing with.
 my @vars = qw(
 meta_cell_state
 report_reads_mapped_confidently_to_transcriptome
@@ -61,52 +61,87 @@ meta_min_cell_size
 report_median_genes_per_cell
 );
 
+if ($q -> param("action") eq 'submit') {
+    
+    # Make up a submission STH
 
-# Make up a submission STH
-
-my $insert_sth =  $dbh->prepare("INSERT INTO report (".join(",",@vars).") VALUES (".("?,"x$#vars)."?)") or die "Can't create insert sth: $dbh->errstr()";
-
+    my $insert_sth =  $dbh->prepare("INSERT INTO report (".join(",",@vars).") VALUES (".("?,"x$#vars)."?)") or die "Can't create insert sth: $dbh->errstr()";
 # See what we've got
-
+    
 # Now go through the submission and check how many reports we can submit
+    
+    my $report_number = 0;
+    
+    my @warnings;
 
-my $report_number = 0;
+    while (1) {
 
-my @warnings;
+	# Do a quick sanity check that this report exists
+	last unless ($q -> param("report_version_$report_number"));
 
-while (1) {
+	my @bind_params;
 
-    # Do a quick sanity check that this report exists
-    last unless ($q -> param("report_version_$report_number"));
+	foreach my $var (@vars) {
+	    my $value = $q -> param("${var}_$report_number");
 
-    my @bind_params;
+	    unless (defined $value) {
+		push @warnings,"No value for $var in report $report_number\n";
+	    }
 
-    foreach my $var (@vars) {
-	my $value = $q -> param("${var}_$report_number");
+	    push @bind_params,$value;
+	} 
 
-	unless (defined $value) {
-	    push @warnings,"No value for $var in report $report_number\n";
+	# Check the hash doesn't exist already
+
+
+	# Add the report
+	$insert_sth -> execute(@bind_params) or do {
+	    push @warnings,"Failed to insert report $report_number: ".$dbh->errstr();
+	};
+
+	++$report_number;
+
+    }
+
+    print "Content-type: text/plain\n\n";
+    print "Submitted $report_number reports\n";
+
+
+    foreach my $warning (@warnings) {
+	print "WARNING: $warning\n";
+    }
+}
+
+else {
+
+    # Our default action is to return a json object with
+    # all of the data in it.
+
+    my $sql = "SELECT ".join(",",@vars)." FROM report";
+
+    # TODO: Add filters
+
+    print "Content-type: application/json\n\n";
+
+    my $json = JSON::PP->new->ascii->pretty->allow_nonref;
+
+    my $sth = $dbh-> prepare($sql) or die $dbh->errstr();
+
+    $sth -> execute() or die $dbh->errstr();
+
+
+    while (my @values = $sth->fetchrow_array()) {
+	my %hash;
+	for (0..$#vars) {
+	    $hash{$vars[$_]} = $values[$_];
 	}
 
-	push @bind_params,$value;
-    } 
+	print $json->encode(\%hash);
 
-    # Check the hash doesn't exist already
+    }
 
 
-    # Add the report
-    $insert_sth -> execute(@bind_params) or do {
-	push @warnings,"Failed to insert report $report_number: ".$dbh->errstr();
-    };
-
-    ++$report_number;
 
 }
 
-print "Content-type: text/plain\n\n";
-print "Submitted $report_number reports\n";
 
-
-foreach my $warning (@warnings) {
-    print "WARNING: $warning\n";
-}
