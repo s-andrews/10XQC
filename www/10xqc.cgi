@@ -61,6 +61,44 @@ meta_min_cell_size
 report_median_genes_per_cell
 );
 
+my @output_vars = qw(
+id
+meta_cell_state
+report_reads_mapped_confidently_to_transcriptome
+report_file_hash
+report_q30_bases_in_sample_index
+report_q30_bases_in_barcode
+report_estimated_number_of_cells
+report_q30_bases_in_rna_read
+meta_sequencing_technology
+report_version
+report_median_umi_counts_per_cell
+report_transcriptome
+report_valid_barcodes
+report_sample_desc
+report_mean_reads_per_cell
+meta_tissue_dissociation
+meta_scrnaseq_method
+report_reads_mapped_confidently_to_intergenic_regions
+meta_num_cells_loaded
+report_sample_id
+meta_cell_line_tissue
+report_q30_bases_in_umi
+meta_sample_type
+meta_cell_counting_method
+report_fraction_reads_in_cells
+report_total_genes_detected
+report_sequencing_saturation
+report_chemistry_description
+report_number_of_reads
+meta_species
+report_reads_mapped_confidently_to_intronic_regions
+meta_max_cell_size
+report_reads_mapped_confidently_to_exonic_regions
+meta_min_cell_size
+report_median_genes_per_cell
+);
+
 if ($q -> param("action") eq 'submit') {
     
     # Make up a submission STH
@@ -112,12 +150,32 @@ if ($q -> param("action") eq 'submit') {
     }
 }
 
+elsif ($q -> param("action") eq 'rankdata') {
+
+    my @ids = split(/,/,$q->param('ids'));
+
+    my $sth = $dbh->prepare("SELECT report_barcode_rank_plot_data FROM report WHERE id=?");
+
+    my $json = JSON::PP->new->ascii->pretty->allow_nonref;
+
+    print "Content-type: application/json\n\n";
+
+    foreach my $id (@ids) {
+	$sth -> execute($id) or die "Can't get rank data for '$id': ".$dbh->errstr();
+
+	print $json->encode({id => $id,report_barcode_rank_plot_data => $sth->fetchrow_array()});
+
+    }
+
+
+}
+
 else {
 
     # Our default action is to return a json object with
     # all of the data in it.
 
-    my $sql = "SELECT ".join(",",@vars)." FROM report";
+    my $sql = "SELECT ".join(",",@output_vars)." FROM report";
 
     # TODO: Add filters
 
@@ -132,8 +190,8 @@ else {
 
     while (my @values = $sth->fetchrow_array()) {
 	my %hash;
-	for (0..$#vars) {
-	    $hash{$vars[$_]} = $values[$_];
+	for (0..$#output_vars) {
+	    $hash{$output_vars[$_]} = $values[$_];
 	}
 
 	print $json->encode(\%hash);
