@@ -1,0 +1,12 @@
+# This is the config file for 10xqc.  Replace the default
+# values here with the correct values for your own installation
+# of the system.
+
+DB_SERVER	localhost
+
+DB_NAME		10xqc
+
+DB_USERNAME	10xqcuser
+
+DB_PASSWORD	
+

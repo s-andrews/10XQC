@@ -4,7 +4,9 @@ use strict;
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);
 use DBI;
-use FindBin qw($Bin);
+use FindBin qw($RealBin);
+use lib "$RealBin/../";
+use xqc::Constants;
 use JSON;
 use HTML::Template;
 
@@ -12,7 +14,7 @@ use HTML::Template;
 my $config;
 
 # Make DB connectionmy 
-my $dbh = DBI->connect("DBI:mysql:database=10xqc;host=localhost","10xqcuser","",{RaiseError=>0,AutoCommit=>1});
+my $dbh = DBI->connect("DBI:mysql:database=".$xqc::Constants::DB_NAME.";host=".$xqc::Constants::DB_SERVER,$xqc::Constants::DB_USERNAME,$xqc::Constants::DB_PASSWORD,{RaiseError=>0,AutoCommit=>1});
 
 unless ($dbh) {
     die "Couldn't connect to database";
