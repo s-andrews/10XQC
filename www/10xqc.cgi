@@ -158,7 +158,8 @@ elsif ($q -> param("action") eq 'rankdata') {
 
     my $sth = $dbh->prepare("SELECT report_barcode_rank_plot_data FROM report WHERE id=?");
 
-    print "Content-type: application/json\n\n";
+#    print "Content-type: text/plain\n\n";
+     print "Content-type: application/json\n\n";
 
     print "{\n\t\"data\": [\n";
 
@@ -173,6 +174,7 @@ elsif ($q -> param("action") eq 'rankdata') {
 
 
 	my $data = $sth->fetchrow_array();
+#	print "\n\n\n$data\n\n\n";
 	if ($printed_something) {
 	    print ",";
 	}
@@ -200,6 +202,9 @@ else {
 
     print "Content-type: application/json\n\n";
 
+    print "[\n";
+
+    my $printed_something = 0;
     my $json = JSON::PP->new->ascii->pretty->allow_nonref;
 
     my $sth = $dbh-> prepare($sql) or die $dbh->errstr();
@@ -210,13 +215,26 @@ else {
     while (my @values = $sth->fetchrow_array()) {
 	my %hash;
 	for (0..$#output_vars) {
-	    $hash{$output_vars[$_]} = $values[$_];
+	    if ($output_vars[$_] eq 'id') {
+		$hash{DT_RowID} = $values[$_];
+	    }
+	    else {
+		$hash{$output_vars[$_]} = $values[$_];
+	    }
+	}
+
+	if ($printed_something) {
+	    print ",\n";
+	}
+	else {
+	    $printed_something = 1;
 	}
 
 	print $json->encode(\%hash);
 
     }
 
+    print "]\n";
 
 
 }
