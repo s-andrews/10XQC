@@ -158,16 +158,33 @@ elsif ($q -> param("action") eq 'rankdata') {
 
     my $sth = $dbh->prepare("SELECT report_barcode_rank_plot_data FROM report WHERE id=?");
 
-    my $json = JSON::PP->new->ascii->pretty->allow_nonref;
-
     print "Content-type: application/json\n\n";
 
+    print "{\n\t\"data\": [\n";
+
+    my $json = JSON::PP->new->ascii->pretty->allow_nonref;
+
+
+    my $all_ids;
+
+    my $printed_something = 0;
     foreach my $id (@ids) {
 	$sth -> execute($id) or die "Can't get rank data for '$id': ".$dbh->errstr();
 
-	print $json->encode({id => $id,report_barcode_rank_plot_data => $sth->fetchrow_array()});
+
+	my $data = $sth->fetchrow_array();
+	if ($printed_something) {
+	    print ",";
+	}
+	else {
+	    $printed_something = 1;
+	}
+	print "\t\t[\n\t\t\t\"$id\",\n\t\t\t$data\n\t\t]";
+
 
     }
+
+    print "\n\t\t]\n}\n";
 
 
 }
