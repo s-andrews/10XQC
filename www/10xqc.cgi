@@ -202,7 +202,7 @@ else {
 
     print "Content-type: application/json\n\n";
 
-    print "[\n";
+    print "{ \"data\":[\n";
 
     my $printed_something = 0;
     my $json = JSON::PP->new->ascii->pretty->allow_nonref;
@@ -234,7 +234,7 @@ else {
 
     }
 
-    print "]\n";
+    print "]}\n";
 
 
 }
