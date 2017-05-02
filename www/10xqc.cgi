@@ -113,19 +113,26 @@ if ($q -> param("action") eq 'submit') {
     my $report_number = 0;
     
     my @warnings;
+    my @errors;
 
-    while (1) {
+    TOP: while (1) {
 
 	# Do a quick sanity check that this report exists
 	last unless ($q -> param("report_version_$report_number"));
 
 	my @bind_params;
 
+	my $hash;
+
 	foreach my $var (@vars) {
 	    my $value = $q -> param("${var}_$report_number");
 
 	    unless (defined $value) {
-		push @warnings,"No value for $var in report $report_number\n";
+		push @warnings,"Report_$report_number: No value for $var in report $report_number\n";
+	    }
+
+	    if ($var eq 'report_file_hash') {
+		$hash = $value;
 	    }
 
 	    push @bind_params,$value;
@@ -133,6 +140,13 @@ if ($q -> param("action") eq 'submit') {
 
 	# Check the hash doesn't exist already
 
+	my ($existing_id) = $dbh->selectrow_array("SELECT id FROM report WHERE report_file_hash=?",undef,$hash);
+
+	if (defined $existing_id) {
+	    push @errors, "Report_$report_number: This report is already in the database";
+	    ++$report_number;
+	    next TOP;
+	}
 
 	# Add the report
 	$insert_sth -> execute(@bind_params) or do {
@@ -143,13 +157,7 @@ if ($q -> param("action") eq 'submit') {
 
     }
 
-    print "Content-type: text/plain\n\n";
-    print "Submitted $report_number reports\n";
-
-
-    foreach my $warning (@warnings) {
-	print "WARNING: $warning\n";
-    }
+    write_status("Reports submitted","Submitted ".($report_number - scalar @errors)." reports successfully",\@errors,\@warnings); 
 }
 
 elsif ($q -> param("action") eq 'rankdata') {
@@ -239,4 +247,29 @@ else {
 
 }
 
+
+sub write_status {
+    my ($title,$message,$errors,$warnings) = @_;
+
+    my @errors;
+    foreach my $error (@$errors) {
+	push @errors,{error => $error};
+    }
+
+    my @warnings;
+    foreach my $warning (@$warnings) {
+	push @warnings,{warning => $warning};
+    }
+
+    my $template = HTML::Template->new(filename => "$RealBin/../templates/message_template.html");
+
+    $template -> param(title => $title,
+		       message => $message,
+		       errors => \@errors,
+		       warnings => \@warnings);
+
+    print "Content-type: text/html\n\n";
+    print $template->output();
+
+}
 

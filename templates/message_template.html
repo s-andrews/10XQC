@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>10XQC - Single Cell QC Metrics for 10X Runs</title>
+  <meta name="description" content="10XQC - Single Cell QC Metrics for 10X Runs">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#top-navbar" aria-controls="top-navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="index.html">10XQC</a>
+
+  <div class="collapse navbar-collapse" id="top-navbar">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav mr-sm-2">
+      <li class="nav-item">
+        <a class="btn btn-outline-success" href="upload.html">Submit Report</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <h1><!-- TMPL_VAR NAME=TITLE ESCAPE=HTML --></h1>
+
+  <!-- TMPL_IF NAME=MESSAGE -->
+  <p><!-- TMPL_VAR NAME=MESSAGE ESCAPE=HTML --></p>
+  <!-- /TMPL_IF -->
+
+  <!-- TMPL_IF NAME=ERRORS -->
+  <h2>Errors</h2>
+  <!-- TMPL_LOOP NAME=ERRORS -->
+  <p><!-- TMPL_VAR NAME=ERROR ESCAPE=HTML --></p>
+  <!-- /TMPL_LOOP -->
+  <!-- /TMPL_IF -->
+
+
+  <!-- TMPL_IF NAME=WARNINGS -->
+  <h2>Warnings</h2>
+  <!-- TMPL_LOOP NAME=WARNINGS -->
+  <p><!-- TMPL_VAR NAME=WARNING ESCAPE=HTML --></p>
+  <!-- /TMPL_LOOP -->
+  <!-- /TMPL_IF -->
+
+
+
+
+
+</div>
+
+
+<footer>
+  <div class="container-fluid">
+    10XQC was written by <a href="http://phil.ewels.co.uk">Phil Ewels</a>,
+      <a href="http://www.babraham.ac.uk/science-services/bioinformatics/simon-andrews">Simon Andrews</a>
+      and <a href="http://enseqlopedia.com/">James Hadfield</a>.
+    This website and its authors are not affiliated with <a href="https://www.10xgenomics.com/">10X Genomics</a>.
+  </div>
+</footer>
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/sha1.min.js"></script>
+<script src="js/lz-string.min.js"></script>
+<script src="js/10XQC_submission.js"></script>
+</body>
+</html>
