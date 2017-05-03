@@ -63,42 +63,44 @@ meta_min_cell_size
 report_median_genes_per_cell
 );
 
-my @output_vars = qw(
-id
-meta_cell_state
-report_reads_mapped_confidently_to_transcriptome
-report_file_hash
-report_q30_bases_in_sample_index
-report_q30_bases_in_barcode
-report_estimated_number_of_cells
-report_q30_bases_in_rna_read
-meta_sequencing_technology
-report_version
-report_median_umi_counts_per_cell
-report_transcriptome
-report_valid_barcodes
-report_sample_desc
-report_mean_reads_per_cell
-meta_tissue_dissociation
-meta_scrnaseq_method
-report_reads_mapped_confidently_to_intergenic_regions
-meta_num_cells_loaded
-report_sample_id
-meta_cell_line_tissue
-report_q30_bases_in_umi
-meta_sample_type
-meta_cell_counting_method
-report_fraction_reads_in_cells
-report_total_genes_detected
-report_sequencing_saturation
-report_chemistry_description
-report_number_of_reads
-meta_species
-report_reads_mapped_confidently_to_intronic_regions
-meta_max_cell_size
-report_reads_mapped_confidently_to_exonic_regions
-meta_min_cell_size
-report_median_genes_per_cell
+# Fields in the values are Short name, Long name, show by default, numeric
+
+my %output_vars = (
+id => ["id","id",0,0],
+meta_cell_state => ["Cell State","Cell State",0,0],
+report_reads_mapped_confidently_to_transcriptome => ["Transcriptome Reads", "Reads Mapped Confidently to Transcriptome",0,1],
+report_file_hash => ["File Hash","File sha1 Hash (unique identifier",0,0],
+report_q30_bases_in_sample_index => ["% Q30 in Sample Index","Q30 Bases in Sample Index",0,1],
+report_q30_bases_in_barcode => ["% Q30 in Barcode","Q30 Bases in Barcode",0,1],
+report_estimated_number_of_cells => ["Estimated # Cells","Estimated Number of Cells",1,1],
+report_q30_bases_in_rna_read => ["% Q30 in RNA Read","Q30 Bases in RNA Read",0,1],
+meta_sequencing_technology => ["Sequencing Technology","Sequencing Technology",0,0],
+report_version => ["Cell Ranger Version","Cell Ranger Version",0,0],
+report_median_umi_counts_per_cell => ["Median UMI Counts per Cell","Median UMI Counts per Cell",1,1],
+report_transcriptome =>["Transcriptome","Transcriptome",0,0],
+report_valid_barcodes => ["Valid Barcodes","Valid Barcodes",0,1],
+report_sample_desc => ["Sample Description","Sample Description",0,0],
+report_mean_reads_per_cell => ["Mean Reads per Cell","Mean Reads per Cell",1,1],
+meta_tissue_dissociation => ["Tissue Dissociation","Tissue Dissociation",0,0],
+meta_scrnaseq_method => ["scRNA-Seq method","scRNA-Seq method",0,0],
+report_reads_mapped_confidently_to_intergenic_regions => ["Intergenic Regions Reads","Reads Mapped Confidently to Intergenic Regions",0,1],
+meta_num_cells_loaded => ["# Cells loaded","Estimated number of cells loaded",1,1],
+report_sample_id => ["Sample ID","Sample ID",0,0],
+meta_cell_line_tissue => ["Cell Line / Tissue","Cell Line / Tissue Type",1,0],
+report_q30_bases_in_umi => ["% Q30 in UMI","Q30 Bases in UMI",0,1],
+meta_sample_type => ["Sample type","Sample type",1,0],
+meta_cell_counting_method => ["Counting Technology","Cell counting technology",0,0],
+report_fraction_reads_in_cells => ["Fraction Reads in Cells","Fraction Reads in Cells",1,1],
+report_total_genes_detected => ["Total Genes Detected","Total Genes Detected",0,1],
+report_sequencing_saturation => ["Sequencing Saturation","Sequencing Saturation",0,1],
+report_chemistry_description => ["Chemistry Description","Chemistry Description",0,0],
+report_number_of_reads => ["Number of Reads","Number of Reads",0,1],
+meta_species => ["Species","Species",1,0],
+report_reads_mapped_confidently_to_intronic_regions => ["Intronic Regions Reads","Reads Mapped Confidently to Intronic Regions",0,1],
+meta_max_cell_size => ["Max cell size (μm)","Max cell size (μm)",0,1],
+report_reads_mapped_confidently_to_exonic_regions => ["Exonic Regions Reads","Reads Mapped Confidently to Exonic Regions",0,1],
+meta_min_cell_size => ["Min cell size (μm)","Min cell size (μm)",0,1],
+report_median_genes_per_cell => ["Median Genes per Cell","Median Genes per Cell",1,1],
 );
 
 if ($q -> param("action") eq 'submit') {
@@ -199,10 +201,47 @@ elsif ($q -> param("action") eq 'rankdata') {
 
 }
 
+
+elsif ($q -> param("action") eq 'fields') {
+
+    my @ids = split(/,/,$q->param('ids'));
+
+    my $sth = $dbh->prepare("SELECT report_sample_id,report_barcode_rank_plot_data FROM report WHERE id=?");
+
+#    print "Content-type: text/plain\n\n";
+     print "Content-type: application/json\n\n";
+
+
+    print "{\n\t\"_column_descriptions\": [\n\t\t\"field_key\",\n\t\t\"Short Name\",\n\t\t\"Longer Name\",\n\t\t\"Show by default (boolean)\",\n\t\t\"Numeric (boolean)\"\n\t],\n\t\"columns\": [\n";
+
+
+
+    my @output_vars = sort keys %output_vars;
+
+    my $printed_something = 0;
+    foreach my $var (@output_vars) {
+
+	if ($printed_something) {
+	    print ",\n";
+	}
+	else {
+	    $printed_something = 1;
+	}
+	print "\t\t[\n\t\t\t\"$output_vars{$var}->[0]\",\n\t\t\t\"$output_vars{$var}->[1]\",\n\t\t\t$output_vars{$var}->[2],\n\t\t\t$output_vars{$var}->[3]\n\t\t]";
+
+    }
+
+    print "\n\t]\n}\n";
+
+
+}
+
 else {
 
     # Our default action is to return a json object with
     # all of the data in it.
+
+    my @output_vars = sort keys %output_vars;
 
     my $sql = "SELECT ".join(",",@output_vars)." FROM report";
 
