@@ -227,7 +227,7 @@ elsif ($q -> param("action") eq 'fields') {
 	else {
 	    $printed_something = 1;
 	}
-	print "\t\t[\n\t\t\t\"$output_vars{$var}->[0]\",\n\t\t\t\"$output_vars{$var}->[1]\",\n\t\t\t$output_vars{$var}->[2],\n\t\t\t$output_vars{$var}->[3]\n\t\t]";
+	print "\t\t[\n\t\t\t\"$var\",\n\t\t\t\"$output_vars{$var}->[0]\",\n\t\t\t\"$output_vars{$var}->[1]\",\n\t\t\t$output_vars{$var}->[2],\n\t\t\t$output_vars{$var}->[3]\n\t\t]";
 
     }
 
