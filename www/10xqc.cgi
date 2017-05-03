@@ -263,7 +263,7 @@ else {
 	my %hash;
 	for (0..$#output_vars) {
 	    if ($output_vars[$_] eq 'id') {
-		$hash{DT_RowID} = $values[$_];
+		$hash{DT_RowId} = "row_".$values[$_];
 	    }
 	    else {
 		$hash{$output_vars[$_]} = $values[$_];
