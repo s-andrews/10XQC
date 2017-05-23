@@ -4,10 +4,19 @@
 s_datatable = null;
 default_columns = [];
 c_data = {};
+
+// API URLs
+table_api = '10xqc.cgi';
+fields_api = '10xqc.cgi?action=fields';
+
+// Testing API URLs
+// table_api = 'test/browse.json';
+// fields_api = 'test/fields_cgi.json';
+
 $(function() {
 
   // Get the available table columns
-  $.getJSON('api/fields.json', function(ajax_data){
+  $.getJSON(fields_api, function(ajax_data){
 
     // Make columns data global
     c_data = ajax_data['columns'];
@@ -91,7 +100,7 @@ function build_datatables_table(columns){
 
   // Initialise DataTables
   s_datatable = $('#sample_browse_table').DataTable( {
-    ajax: 'api/browse.json', // static testing file
+    ajax: table_api,
     columns: dt_cols,
     scrollX: '100%',
     dom: 'lBfrtip',

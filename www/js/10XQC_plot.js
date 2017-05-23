@@ -1,5 +1,11 @@
 // 10XQC JavaScript - Plot stuff on homepage
 
+// API URLs
+plot_api = '10xqc.cgi?action=rankdata&';
+
+// Testing API URLs
+// plot_api = 'test/plot_cgi.json?';
+
 $(function() {
   // Listeners
   $('#plot_umi_barcodes_btn').click(function(e){
@@ -25,7 +31,7 @@ function plot_umi_barcodes(){
   // Get the hashes of the reports to plot
   samples = [];
   $('#sample_browse_table tbody tr').each(function(){
-    samples.push($(this).attr('id'));
+    samples.push( $(this).attr('id').replace('row_', '') );
   });
 
   // Find which column is sorted
@@ -34,12 +40,9 @@ function plot_umi_barcodes(){
   $('#umi_plot_modal_cat_1 option[value="'+sort_col+'"]').attr('selected', true);
 
   // Load the data
-  var postdata = {
-    'name_col': sort_col,
-    'samples': samples
-  }
-  // $.post('api/umi_barcode_plotdata.json', postdata).done(function(ajax_data) { //TESTING
-  $.getJSON('api/umi_barcode_plotdata.json', function(ajax_data) {
+  var api_url = plot_api+'ids='+samples.join(',');
+  console.log(api_url);
+  $.getJSON(api_url, function(ajax_data) {
     $('#umi_plot_modal_plotdiv').empty();
     pdata = [];
     $.each(ajax_data['data'], function(idx, data){
