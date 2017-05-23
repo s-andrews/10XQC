@@ -19,7 +19,7 @@ CREATE TABLE report (
 	report_transcriptome VARCHAR(100),
 	report_valid_barcodes NUMERIC(4,1),
 	report_sample_desc VARCHAR(255),
-	report_barcode_rank_plot_data TEXT,
+	report_barcode_rank_plot_data LONGTEXT,
 	report_mean_reads_per_cell INT,
 	meta_tissue_dissociation VARCHAR(100),
 	meta_scrnaseq_method VARCHAR(100),
