@@ -184,6 +184,11 @@ elsif ($q -> param("action") eq 'rankdata') {
 
 
 	my ($sample_id,$data) = $sth->fetchrow_array();
+
+	unless ($sample_id) {
+	    die "Couldn't find rank data for id $id";
+	}
+
 #	print "\n\n\n$data\n\n\n";
 	if ($printed_something) {
 	    print ",";
@@ -191,7 +196,8 @@ elsif ($q -> param("action") eq 'rankdata') {
 	else {
 	    $printed_something = 1;
 	}
-	print "\t\t[\n\t\t\t\"$sample_id\",\n\t\t\t$data\n\t\t]";
+	#print "\t\t[\n\t\t\t\"$sample_id\",\n\t\t\t$data\n\t\t]";
+	print "\t\t[\n\t\t\t\"$id\",\n\t\t\t$data\n\t\t]";
 
 
     }
