@@ -63,7 +63,7 @@
       <h2 id="browse">Browse Sample Metadata</h2>
     </div>
     <div class="col-md-6 text-right">
-      <button id="plot_metadata_btn" class="btn btn-outline-primary">Plot Metadata</button>
+      <button id="plot_metadata_btn" class="btn btn-outline-primary">Metadata Scatter Plot</button>
       <button id="plot_umi_barcodes_btn" class="btn btn-outline-primary">Plot UMI Counts vs Barcodes</button>
     </div>
   </div>
@@ -131,15 +131,12 @@
             as the "double knee" curve.</p>
             <p>The plot shows samples currently visible in the Browse table (first page only).</p>
             <form>
-              <label id="umi_plot_modal_cat_label" for="umi_plot_modal_cat_1">Category:</label>
+              <label id="umi_plot_modal_cat_label" for="umi_plot_modal_cat_1">Labels:</label>
               <select id="umi_plot_modal_cat_1" class="form-control" style="display:none;"></select>
-              <select id="umi_plot_modal_cat_2" class="form-control" style="display:none;"></select>
             </form>
-            <p>&nbsp;</p>
-            <div class="alert alert-warning">Above feature still under construction.</div>
           </div>
           <div class="col umi_plot_modal_plotdiv_wrapper">
-            <div id="umi_plot_modal_plotdiv"><p class="text-muted text-center">Loading..</p></div>
+            <div id="umi_plot_modal_plotdiv"><div class="alert alert-info mt-5">Loading plot..</div></div>
           </div>
         </div>
       </div>
@@ -157,23 +154,28 @@
       <div class="modal-body">
         <form>
           <div class="form-group row">
-            <label for="table_plot_modal_yaxis" class="col-sm-2 col-form-label">Y-Axis:</label>
             <div class="col-sm-4">
+              <label for="table_plot_modal_label" class="col-form-label">Label:</label>
+              <select class="form-control" id="table_plot_modal_label">
+                <option value="">[ select category ]</option>
+              </select>
+            </div>
+            <div class="col-sm-4">
+              <label for="table_plot_modal_yaxis" class="col-form-label">Y-Axis:</label>
               <select class="form-control" id="table_plot_modal_yaxis">
                 <option value="">[ select category ]</option>
               </select>
             </div>
-            <label for="table_plot_modal_xaxis" class="col-sm-2 col-form-label">X-Axis:</label>
             <div class="col-sm-4">
+              <label for="table_plot_modal_xaxis" class="col-form-label">X-Axis:</label>
               <select class="form-control" id="table_plot_modal_xaxis">
                 <option value="">[ select category ]</option>
               </select>
             </div>
           </div>
         </form>
-        <div class="alert alert-warning">This feature is under construction - sorry!</div>
-        <div class="col table_plot_modal_plotdiv_wrapper">
-          <div id="table_plot_modal_plotdiv"><p class="text-muted text-center">Select columns to compare</p></div>
+        <div class="col table_plot_modal_plotdiv_wrapper text-center" style="width:600px; margin:auto;">
+          <div id="table_plot_modal_plotdiv"><div class="alert alert-info">Please select fields to compare</div></div>
         </div>
       </div>
       <div class="modal-footer">
