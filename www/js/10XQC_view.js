@@ -51,6 +51,7 @@ $(function() {
     // Get data for the table
     $.getJSON(table_api, function(ajax_data) {
       t_data = ajax_data['data'];
+      $('.num_reports').text(t_data.length);
       // Build the basic table for DataTables
       build_datatables_table(default_columns);
     });
@@ -114,12 +115,51 @@ function build_datatables_table(columns){
       columns: dt_cols,
       scrollX: '100%',
       dom: 'lBfrtip',
-      buttons: [{
-        text: 'Choose Columns',
-        action: function ( e, dt, node, config ) {
-          $('#table_columns_modal').modal('show');
+      lengthMenu: [
+        [10, 50, 100, -1],
+        [10, 50, 100, "All"]
+      ],
+      buttons: [
+        {
+          text: 'Choose Columns',
+          action: function ( e, dt, node, config ) {
+            $('#table_columns_modal').modal('show');
+          }
+        },
+        {
+          text: 'Download Data',
+          action: function ( e, dt, node, config ) {
+            try {
+              var datastring = '';
+              var keys = [];
+              for(i=0; i<t_data.length; i++){
+                if(keys.length==0){
+                  keys = Object.keys(t_data[i]);
+                  for(j=0;j<keys.length;j++){
+                    var key = keys[j];
+                    if(key == 'DT_RowId'){ key = 'id'; }
+                    for(k=0;k<c_data.length;k++){
+                      if(c_data[k][0] == key){
+                        datastring += c_data[k][2]+"\t";
+                      }
+                    }
+                  }
+                  datastring += "\n";
+                }
+                for(j=0;j<keys.length;j++){
+                  datastring += t_data[i][keys[j]]+"\t";
+                }
+                datastring += "\n";
+              }
+              var blob = new Blob([datastring], {type: "text/plain;charset=utf-8"});
+              saveAs(blob, '10xqc.tsv');
+            } catch(e){
+              alert("Error - apologies, something broke.");
+              console.error(e);
+            }
+          }
         }
-      }]
+      ]
     });
   } catch(e){
     $("#sample_browse_table").html('<tbody><tr><td><div class="alert alert-danger">Error - could not load table.</div></td></tr></tbody>');
