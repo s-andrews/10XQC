@@ -237,5 +237,18 @@ function plot_metadata(){
       title: ycat
     }
   };
-  Plotly.newPlot('table_plot_modal_plotdiv', pdata, layout);
+  var config = {
+    displaylogo: false,
+    showlink: false,
+    modeBarButtonsToRemove: [
+      // "zoom2d",
+      // "pan2d",
+      // "zoomIn2d",
+      // "zoomOut2d",
+      "autoScale2d",
+      // "toImage",
+      "sendDataToCloud"
+    ]
+  };
+  Plotly.newPlot('table_plot_modal_plotdiv', pdata, layout, config);
 }
