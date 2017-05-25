@@ -148,23 +148,32 @@ function plot_umi_barcodes(){
 }
 
 function update_umi_plot_names(){
-  // Get the default colours
-  var colors = Plotly.d3.scale.category20();
-  // List to hold unique names
-  var names = [];
-  // Get the new label id
-  var labelname = $('#umi_plot_modal_cat_1').val();
-  for (i = 0; i < pdata.length; i++){
-    var uid = pdata[i]['uid'];
-    var name = t_data[uid][labelname];
-    if(names.indexOf(name) < 0){
-      names.push(name);
+  try {
+    // Get the default colours
+    var colors = Plotly.d3.scale.category20();
+    // List to hold unique names
+    var names = [];
+    // Get the new label id
+    var labelname = $('#umi_plot_modal_cat_1').val();
+    for (i = 0; i < pdata.length; i++){
+      name = '';
+      for(j=0; j<t_data.length; j++){
+        if(t_data[j]['DT_RowId'].replace('row_','') == pdata[i]['uid']){
+          name = t_data[j][labelname];
+        }
+      }
+      if(names.indexOf(name) < 0){
+        names.push(name);
+      }
+      var colour = colors(names.indexOf(name));
+      pdata[i]['name'] = name;
+      pdata[i]['line']['color'] = colour;
     }
-    var colour = colors(names.indexOf(name));
-    pdata[i]['name'] = name;
-    pdata[i]['line']['color'] = colour;
+    Plotly.update('umi_plot_modal_plotdiv', pdata);
+  } catch(e){
+    $('.umi_plot_modal_plotdiv_wrapper').empty().html('<div id="umi_plot_modal_plotdiv"><div class="alert alert-danger mt-5"><strong>Error:</strong> Something went wrong when making the plot.</div></div>');
+    console.error(e);
   }
-  Plotly.update('umi_plot_modal_plotdiv', pdata);
 }
 
 
