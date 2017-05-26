@@ -89,12 +89,16 @@ function plot_umi_barcodes(){
               name = t_data[i][sort_col];
             }
           }
+          var show_leg = false;
           if(names.indexOf(name) < 0){
             names.push(name);
+            show_leg = true;
           }
           var colour = colors(names.indexOf(name));
           pdata.push( {
             name: name,
+            legendgroup: name,
+            showlegend: show_leg,
             uid: data[0],
             x: data[1][0],
             y: data[1][1],
@@ -110,8 +114,12 @@ function plot_umi_barcodes(){
         // Make the plot
         var layout = {
           title:'UMI Counts vs Barcode',
-          height: 500,
-          width: 500,
+          height: 600,
+          showlegend: true,
+          legend: {
+            traceorder: "normal",
+            orientation: "h"
+          },
           hovermode: 'closest',
           xaxis: {
             title: 'Barcodes',
@@ -162,11 +170,15 @@ function update_umi_plot_names(){
           name = t_data[j][labelname];
         }
       }
+      var show_leg = false;
       if(names.indexOf(name) < 0){
         names.push(name);
+        show_leg = true;
       }
       var colour = colors(names.indexOf(name));
       pdata[i]['name'] = name;
+      pdata[i]['legendgroup'] = name;
+      pdata[i]['showlegend'] = show_leg;
       pdata[i]['line']['color'] = colour;
     }
     Plotly.update('umi_plot_modal_plotdiv', pdata);
@@ -204,14 +216,18 @@ function plot_metadata(){
   // Get the data
   var pdata = [];
   for(i=0; i<t_data.length; i++){
-    if(samples.indexOf(t_data[i]['DT_RowId']) > 0){
+    if(samples.indexOf(t_data[i]['DT_RowId']) >= 0){
       var name = t_data[i][label];
+      var show_leg = false;
       if(names.indexOf(name) < 0){
         names.push(name);
+        show_leg = true;
       }
       var colour = colors(names.indexOf(name));
       pdata.push( {
         name: name,
+        legendgroup: name,
+        showlegend: show_leg,
         uid: t_data[i]['DT_RowId'],
         x: [t_data[i][xcat]],
         y: [t_data[i][ycat]],
@@ -228,7 +244,6 @@ function plot_metadata(){
   var layout = {
     title:'10XQC Metadata Scatter Plot',
     height: 500,
-    width: 600,
     hovermode: 'closest',
     xaxis: {
       title: xcat
