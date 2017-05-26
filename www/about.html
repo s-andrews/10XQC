@@ -36,14 +36,59 @@
   </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container text-justify">
   <h1 class="display-3 mb-3">About 10XQC</h1>
-  <p>10XQC was thought up by <a href="http://enseqlopedia.com/about-me/" target="_blank">James Hadfield</a>
-      at the <a href="http://www.cruk.cam.ac.uk/core-facilities/genomics-core" target="_blank">CRUK Genomics core facility</a>
-      in Cambridge, UK. It was built by <a href="http://phil.ewels.co.uk/" target="_blank">Phil Ewels</a>
-      and <a href="http://www.babraham.ac.uk/science-services/bioinformatics/simon-andrews" target="_blank">Simon Andrews</a>.
-  </p>
-  <p>The code for 10XQC is open-source and available on GitHub at <a href="https://github.com/s-andrews/10XQC">https://github.com/s-andrews/10XQC</a>.</p>
+  <p class="lead">A single-cell quality-control portal for collection, sharing and analysis of single-cell experiment QC data.</p>
+
+  <p>Single-cell sequencing is becoming a commonly used tool by biologists. Systems like 10XGenomics, Fluidigm’s C1, Drop-Seq or SeqWell are making the generation of single-cell RNA-Seq data relatively simple; however there is a high degree of variability on the success of single-cell projects.</p>
+
+  <p>This portal aims to make it easier for users to share their experiences via upload of experimental metadata* and platform specific QC reports*. Users can also filter and query the database for experimental factors e.g. specific sample types, dissociation protocol, etc, and identify which protocol modifications may be best applied to their own experiments.</p>
+
+  <p>This site provides an easy to use web interface for the collection, processing and analysis of MIAME<sup>1</sup> style experimental meta-data and single-cell QC reports, <em>e.g.</em> 10X Genomics Cell Ranger&reg;. By providing the single-cell community this central portal for comparison of these data SCQC will enable more rapid identification of the factors that may be beneficial, or detrimental, to single-cell analysis. As well as helping with the development of best practices and standards by allowing users to more quickly assemble meta-analysis of different datasets. It will also help by connecting users in the single-cell community.</p>
+
+  <p>SQCQ uses a basic MIASCE: Minimal Information About a Single-Cell Experiment, for collection of experimental meta-data for comparison and sharing of results between collaborating and disparate laboratories alike. Users submit metadata when submitting their QC reports – a batch upload tool is in development.</p>
+
+  <p>We hope that SCQC will enable more rapid identification of the factors that may be beneficial, or detrimental, to single-cell sequencing experiments. And will help with speed the development of best practices and standards in the field.</p>
+
+
+  <h3>Data sharing</h3>
+  <p>All data submitted should be anonymised and will be available for download for local analysis by registered users. Additionally SCQC portal code and software used is available <a href="https://github.com/s-andrews/10XQC">on GitHub</a> under the MIT open-source license.</p>
+
+  <h3>SQCQ team</h3>
+  <ul>
+    <li><a href="http://enseqlopedia.com/about-me/" target="_blank">Dr James Hadfield</a>:
+        CRUK Cambridge Institute, Cambridge, UK</li>
+    <li><a href="http://www.babraham.ac.uk/science-services/bioinformatics/simon-andrews" target="_blank">Dr Simon Andrews</a>:
+        Babraham Institute, Cambridge, UK</li>
+    <li><a href="http://phil.ewels.co.uk/" target="_blank">Dr Philip Ewels</a>:
+        Science for Life Laboratory, Stockholm University, SE</li>
+    <li><a href="https://www.researchgate.net/profile/Paul_Coupland" target="_blank">Dr Paul Coupland</a>:
+        CRUK Cambridge Institute, Cambridge, UK</li>
+  </ul>
+
+  <h3>Development plan</h3>
+  <p>We have applied for funding to extend the SCQC QC portal to other single-cell technologies (currently only 10X Genomics is supported), and develop the site to accommodate future technologies, which will enable in-depth cross-platform QC analyses to be performed. Making data available for more than scRNA-Seq requires consideration of the best QC metrics to include from technologies as diverse as in-situ hybridization or other high-content imaging platforms, proteomics, metabolomics, and epigenetics. We will engage with the community around these QC standards as they develop. However the SCQC portal will collect similar metadata from users of these different technologies simplifying comparison of multiple approaches to tissue preparation and sample handling. Ultimately the community will need to know if the same methods can be used across different technologies or whether tissues and cells need to be handled very differently to generate the very best results.</p>
+
+  <p>The development plan includes:</p>
+
+  <ul>
+    <li>MIASCE standardisation: Minimal Information About a Single-Cell Experiment as a standard for single-cell meta-data submission.</li>
+    <li>Develop tools to make MIASCE column visibility selectable for easier viewing.</li>
+    <li>Develop an automated QC analysis capable of detecting the major issues with single-cell experiments: low-cell capture efficiency, saturation of sequencing, imbalance of read distributions across the transcriptome, etc, which will allow users to be confident their data are likely to generate high confidence results in downstream analysis</li>
+    <li>Develop the QC reporting to summarise QC metrics, at submission by the user, alongside user selectable data from the QC database.</li>
+    <li>Develop automated update of plots based on user selected metadata via a query interface.</li>
+    <li>Develop clustering analysis on automated scoring QC to create overview heatmaps of the database, or selected samples, that will be of use to non-experts in determining the major impacts on their experiments.</li>
+    <li>Review submission of accession IDs or PMIDs where data are ultimately published.</li>
+    <li>Interface with the Human Cell Atlas web portal or HCA data ingestion service to ensure all HCA experiments are available through SCQC alongside, and queryable with, non-HCA projects.</li>
+    <li>Analyse submitted data to provide guidance on interpreting QC reports.</li>
+    <li>Prepare a manuscript for publication describing SCQC, MIASCE, and summarising the main technical issues with single-cell experiments based our analysis of the database</li>
+  </ul>
+
+  <h4>References:</h4>
+  <ol>
+    <li>Brazma, A. et al. Minimum information about a microarray experiment (MIAME) - toward standards for microarray data. Nat. Genet. 29, 365–71 (2001).</li>
+  </ol>
+
 </div>
 
 
