@@ -116,6 +116,22 @@ $(function() {
   });
 
 
+  // Save / Don't save dropdowns
+  $('#report_fields_table').on('change', '.savedel-select', function(e){
+    var targets = $(this).data('target');
+    if($(this).val() !== 'Save'){
+      $(targets).each(function(e){
+        $(this).data('old-value', $(this).val() );
+        $(this).val('').attr('value', '');
+      });
+    } else {
+      $(targets).each(function(e){
+        var d = $(this).data('old-value');
+        $(this).val( d ).attr('value', d );
+      });
+    }
+  });
+
   // Form Validation
   $.validator.setDefaults({
       highlight: function(element) {
@@ -249,7 +265,7 @@ function second_form(parsed_data, failed_files){
     if(i == 0){
       // First row - just rename the table header
       $('#manual_metadata_table thead tr th:nth-child(2)').text(form_data[0]['report_sample_id']);
-      $('#report_fields_table thead tr th:nth-child(2)').text(form_data[0]['report_sample_id']);
+      $('#report_fields_table thead tr th:nth-child(3)').text(form_data[0]['report_sample_id']);
     } else {
       // Clone first column and update number in id + name
       $('#manual_metadata_table thead tr').append('<th>'+form_data[i]['report_sample_id']+'</th>');
@@ -278,9 +294,10 @@ function second_form(parsed_data, failed_files){
       if(i == 0){
         $('#report_fields_table tbody').append(' \
           <tr id="'+report_field_ids[j]+'_trow"> \
-            <td><label for="'+report_field_ids[j]+'_'+i+'" class="col-form-label">'+report_field_titles[j]+'</label></td> \
+            <td><label for="'+report_field_ids[j]+'_savedel" class="col-form-label">'+report_field_titles[j]+'</label></td> \
+            <td><select id="'+report_field_ids[j]+'_savedel" data-target=".manual_md_'+report_field_ids[j]+'" class="form-control savedel-select"><option>Save</option><option>Do not save</option></select></td> \
             <td><div class="'+input_gp+'"> \
-              <input id="'+report_field_ids[j]+'_'+i+'" name="'+report_field_ids[j]+'_'+i+'" class="form-control" type="text" readonly value="'+value+'"> \
+              <input id="'+report_field_ids[j]+'_'+i+'" name="'+report_field_ids[j]+'_'+i+'" class="form-control manual_md_'+report_field_ids[j]+'" type="text" readonly value="'+value+'"> \
               ' + input_addon + '\
             </div></td> \
           </tr> \
@@ -290,7 +307,7 @@ function second_form(parsed_data, failed_files){
       else {
         $('#'+report_field_ids[j]+'_trow').append(
           '<td><div class="'+input_gp+'"> \
-            <input id="'+report_field_ids[j]+'_'+i+'" name="'+report_field_ids[j]+'_'+i+'" class="form-control" type="text" readonly value="'+value+'"> \
+            <input id="'+report_field_ids[j]+'_'+i+'" name="'+report_field_ids[j]+'_'+i+'" class="form-control manual_md_'+report_field_ids[j]+'" type="text" readonly value="'+value+'"> \
             ' + input_addon + '\
           </div></td> \
         ');
