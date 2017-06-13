@@ -166,10 +166,9 @@ elsif ($q -> param("action") eq 'rankdata') {
 
     my @ids = split(/,/,$q->param('ids'));
 
-    my $sth = $dbh->prepare("SELECT report_sample_id,report_barcode_rank_plot_data FROM report WHERE id=?");
+    my $sth = $dbh->prepare("SELECT report_barcode_rank_plot_data FROM report WHERE id=?");
 
-#    print "Content-type: text/plain\n\n";
-     print "Content-type: application/json\n\n";
+    print "Content-type: application/json\n\n";
 
     print "{\n\t\"data\": [\n";
 
@@ -183,20 +182,14 @@ elsif ($q -> param("action") eq 'rankdata') {
 	$sth -> execute($id) or die "Can't get rank data for '$id': ".$dbh->errstr();
 
 
-	my ($sample_id,$data) = $sth->fetchrow_array();
+	my ($data) = $sth->fetchrow_array();
 
-	unless (defined $sample_id) {
-	    die "Couldn't find rank data for id $id";
-	}
-
-#	print "\n\n\n$data\n\n\n";
 	if ($printed_something) {
 	    print ",";
 	}
 	else {
 	    $printed_something = 1;
 	}
-	#print "\t\t[\n\t\t\t\"$sample_id\",\n\t\t\t$data\n\t\t]";
 	print "\t\t[\n\t\t\t\"$id\",\n\t\t\t$data\n\t\t]";
 
 
