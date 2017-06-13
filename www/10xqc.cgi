@@ -185,7 +185,7 @@ elsif ($q -> param("action") eq 'rankdata') {
 
 	my ($sample_id,$data) = $sth->fetchrow_array();
 
-	unless ($sample_id) {
+	unless (defined $sample_id) {
 	    die "Couldn't find rank data for id $id";
 	}
 
